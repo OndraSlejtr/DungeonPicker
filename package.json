@@ -4,6 +4,12 @@
     "packageManager": "pnpm@9.12.1",
     "type": "module",
     "scripts": {
-        "start": "pnpm recursive run start"
+        "start": "pnpm recursive run start",
+        "build": "pnpm --filter dp_frontend build && pnpm --filter dp_backend build && rimraf backend/dist/fe-dist && mkdirp backend/dist/fe-dist && cp -r frontend/dist/* backend/dist/fe-dist/",
+        "start:prod": "node backend/dist/index.js"
+    },
+    "devDependencies": {
+        "mkdirp": "^3.0.1",
+        "rimraf": "^6.0.1"
     }
 }

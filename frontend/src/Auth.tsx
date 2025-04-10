@@ -1,9 +1,21 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+const clientId = import.meta.env.VITE_DISCORD_CLIENT_ID;
+const redirectUri = `${window.location.origin}/auth/callback`;
+const scope = "identify email";
+
+const backendUrl = import.meta.env.VITE_BACKEND_URL || "";
+
+type DiscordUserData = {
+    id: string;
+    username: string;
+    email: string;
+};
+
 const Auth = () => {
     const [authCode, setAuthCode] = useState<string | null>(null);
-    const [userData, setUserData] = useState<any>(null);
+    const [userData, setUserData] = useState<DiscordUserData | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -11,7 +23,7 @@ const Auth = () => {
             // Fetch user data from the backend if not already fetched
             const fetchUserData = async () => {
                 try {
-                    const response = await axios.get("http://localhost:5000/api/auth/user", {
+                    const response = await axios.get(`${backendUrl}/api/auth/user`, {
                         withCredentials: true,
                     });
                     setUserData(response.data);
@@ -24,10 +36,6 @@ const Auth = () => {
             fetchUserData();
         }
     }, [userData]);
-
-    const clientId = "1359906135255023919";
-    const redirectUri = "http://localhost:5173/auth/callback";
-    const scope = "identify email";
 
     const authorizationUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
         redirectUri
@@ -46,13 +54,9 @@ const Auth = () => {
             // Send the authorization code to the backend
             const authenticate = async () => {
                 try {
-                    await axios.post(
-                        "http://localhost:5000/api/auth/callback",
-                        { authCode },
-                        { withCredentials: true }
-                    );
+                    await axios.post(`${backendUrl}/api/auth/callback`, { authCode }, { withCredentials: true });
 
-                    const userResponse = await axios.get("http://localhost:5000/api/auth/user", {
+                    const userResponse = await axios.get(`${backendUrl}/api/auth/user`, {
                         withCredentials: true,
                     });
                     setUserData(userResponse.data);

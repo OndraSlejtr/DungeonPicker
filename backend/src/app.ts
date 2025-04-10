@@ -3,13 +3,19 @@ import axios from "axios";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
+import { fileURLToPath } from "url";
+
+import path from "path";
+
 const app = express();
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const FRONTEND_URL = process.env.FRONTEND_URL;
+
 const corsOptions = {
-    origin: "http://localhost:5173",
+    origin: FRONTEND_URL,
     credentials: true,
     optionsSuccessStatus: 200,
 };
@@ -18,7 +24,6 @@ app.use(cors(corsOptions));
 
 const clientId = "1359906135255023919";
 const clientSecret = process.env.CLIENT_SECRET;
-const redirectUri = "http://localhost:5173/auth/callback";
 
 app.get("/api/auth/user", async (req, res) => {
     const accessToken = req.cookies.access_token;
@@ -86,6 +91,8 @@ app.post("/api/auth/refresh", async (req, res) => {
 app.post("/api/auth/callback", async (req, res) => {
     const { authCode } = req.body;
 
+    const host = `${req.protocol}://${req.get("host")}`;
+
     if (!authCode) {
         return res.status(400).json({ error: "Authorization code is required" });
     }
@@ -98,7 +105,7 @@ app.post("/api/auth/callback", async (req, res) => {
                 client_secret: clientSecret,
                 grant_type: "authorization_code",
                 code: authCode,
-                redirect_uri: redirectUri,
+                redirect_uri: `${host}/auth/callback`,
             }),
             { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
         );
@@ -122,6 +129,22 @@ app.post("/api/auth/callback", async (req, res) => {
         console.error("Error exchanging code for token:", err);
         res.status(500).json({ error: "Failed to authenticate" });
     }
+});
+
+// Derive __dirname in ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const environment = process.env.NODE_ENV;
+const isDevelopment = environment === "development";
+
+// Serve static files from the frontend's build directory
+const frontendPath = path.join(__dirname, isDevelopment ? "../../frontend/dist" : "./fe-dist");
+app.use(express.static(frontendPath));
+
+// Catch-all route to serve the frontend's index.html for any unmatched routes
+app.get("*name", (req, res) => {
+    res.sendFile(path.join(frontendPath, "index.html"));
 });
 
 export default app;

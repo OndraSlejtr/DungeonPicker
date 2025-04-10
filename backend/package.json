@@ -1,11 +1,12 @@
 {
-    "name": "backend",
+    "name": "dp_backend",
     "version": "1.0.0",
     "description": "",
     "main": "src/index.js",
     "type": "module",
     "scripts": {
-        "start": "tsx watch ./src/index.ts"
+        "start": "tsx watch ./src/index.ts",
+        "build": "tsc"
     },
     "keywords": [],
     "author": "",
