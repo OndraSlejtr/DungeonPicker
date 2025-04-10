@@ -3,7 +3,7 @@ import axios from "axios";
 
 const clientId = import.meta.env.VITE_DISCORD_CLIENT_ID;
 const redirectUri = `${window.location.origin}/auth/callback`;
-const scope = "identify email";
+const scope = "identify email guilds";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL || "";
 

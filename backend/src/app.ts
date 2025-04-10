@@ -6,6 +6,7 @@ import cors from "cors";
 import { fileURLToPath } from "url";
 
 import path from "path";
+import { Request, Response } from "express";
 
 const app = express();
 app.use(cookieParser());
@@ -24,13 +25,15 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 const clientId = "1359906135255023919";
-const clientSecret = process.env.CLIENT_SECRET;
+const clientSecret = process.env.CLIENT_SECRET || "";
+const guildId = process.env.ZEN_GUILD_ID || "824215968724942878";
 
-app.get("/api/auth/user", async (req, res) => {
+app.get("/api/auth/user", async (req: Request, res: Response) => {
     const accessToken = req.cookies.access_token;
 
     if (!accessToken) {
-        return res.status(401).json({ error: "Unauthorized" });
+        res.status(401).json({ error: "Unauthorized" });
+        return;
     }
 
     try {
@@ -40,97 +43,132 @@ app.get("/api/auth/user", async (req, res) => {
             },
         });
 
-        res.status(200).json(userResponse.data);
+        const guildsResponse = await axios.get("https://discord.com/api/v10/users/@me/guilds", {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+
+        const guilds = guildsResponse.data;
+
+        // Check if the user is part of the specified guild
+        const guildMembership = guilds.find((guild: { id: string }) => guild.id === guildId);
+
+        if (!guildMembership) {
+            res.status(401).json({ error: "User is not part of the guild." });
+            return;
+        }
+
+        const memberResponse = await axios.get(`https://discord.com/api/v10/guilds/${guildId}/members/@me`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
+
+        const memberData = memberResponse.data;
+
+        // Extract the nickname or fallback to username
+        const nickname = memberData.nick || memberData.user.username;
+
+        res.status(200).json({ ...userResponse.data, guildNickname: nickname });
+        return;
     } catch (err) {
         console.error("Error fetching user data:", err);
         res.status(500).json({ error: "Failed to fetch user data" });
+        return;
     }
 });
 
-app.post("/api/auth/refresh", async (req, res) => {
-    const refreshToken = req.cookies.refresh_token;
+app.post("/api/auth/refresh", [
+    async (req: Request, res: Response) => {
+        const refreshToken = req.cookies.refresh_token as string;
 
-    if (!refreshToken) {
-        return res.status(401).json({ error: "Refresh token is missing" });
-    }
+        if (!refreshToken) {
+            res.status(401).json({ error: "Refresh token is missing" });
+            return;
+        }
 
-    try {
-        const tokenResponse = await axios.post(
-            "https://discord.com/api/oauth2/token",
-            new URLSearchParams({
-                client_id: clientId,
-                client_secret: clientSecret,
-                grant_type: "refresh_token",
-                refresh_token: refreshToken,
-            }),
-            { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
-        );
+        try {
+            const tokenResponse = await axios.post(
+                "https://discord.com/api/oauth2/token",
+                new URLSearchParams({
+                    client_id: clientId,
+                    client_secret: clientSecret,
+                    grant_type: "refresh_token",
+                    refresh_token: refreshToken,
+                }),
+                { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
+            );
 
-        console.log(tokenResponse.data);
+            console.log(tokenResponse.data);
 
-        const { access_token, refresh_token, expires_in } = tokenResponse.data;
+            const { access_token, refresh_token, expires_in } = tokenResponse.data;
 
-        res.cookie("access_token", access_token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            maxAge: expires_in * 1000, // Convert seconds to milliseconds
-        });
+            res.cookie("access_token", access_token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                maxAge: expires_in * 1000, // Convert seconds to milliseconds
+            });
 
-        res.cookie("refresh_token", refresh_token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-        });
+            res.cookie("refresh_token", refresh_token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+            });
 
-        res.status(200).json({ message: "Token refreshed successfully" });
-    } catch (err) {
-        console.error("Error refreshing token:", err);
-        res.status(500).json({ error: "Failed to refresh token" });
-    }
-});
+            res.status(200).json({ message: "Token refreshed successfully" });
+        } catch (err) {
+            console.error("Error refreshing token:", err);
+            res.status(500).json({ error: "Failed to refresh token" });
+        }
+    },
+]);
 
-app.post("/api/auth/callback", async (req, res) => {
-    const { authCode } = req.body;
+app.post("/api/auth/callback", [
+    async (req: Request, res: Response) => {
+        const { authCode } = req.body;
 
-    const host = `${req.protocol}://${req.get("host")}`;
+        const host = `${req.protocol}://${req.get("host")}`;
 
-    if (!authCode) {
-        return res.status(400).json({ error: "Authorization code is required" });
-    }
+        if (!authCode) {
+            res.status(400).json({ error: "Authorization code is required" });
+            return;
+        }
 
-    try {
-        const tokenResponse = await axios.post(
-            "https://discord.com/api/oauth2/token",
-            new URLSearchParams({
-                client_id: clientId,
-                client_secret: clientSecret,
-                grant_type: "authorization_code",
-                code: authCode,
-                redirect_uri: `${host}/auth/callback`,
-            }),
-            { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
-        );
+        try {
+            const tokenResponse = await axios.post(
+                "https://discord.com/api/oauth2/token",
+                new URLSearchParams({
+                    client_id: clientId,
+                    client_secret: clientSecret,
+                    grant_type: "authorization_code",
+                    code: authCode,
+                    redirect_uri: `${host}/auth/callback`,
+                }),
+                { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
+            );
 
-        const { access_token, refresh_token, expires_in } = tokenResponse.data;
+            const { access_token, refresh_token, expires_in } = tokenResponse.data;
 
-        res.cookie("access_token", access_token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            maxAge: expires_in * 1000, // Convert seconds to milliseconds
-        });
+            res.cookie("access_token", access_token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                maxAge: expires_in * 1000, // Convert seconds to milliseconds
+            });
 
-        res.cookie("refresh_token", refresh_token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-        });
+            res.cookie("refresh_token", refresh_token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+            });
 
-        res.status(200).json({ message: "Authentication successful" });
-    } catch (err) {
-        console.error("Error exchanging code for token:", err);
-        res.status(500).json({ error: "Failed to authenticate" });
-    }
-});
+            res.status(200).json({ message: "Authentication successful" });
+        } catch (err) {
+            console.error("Error exchanging code for token:", err);
+            res.status(500).json({ error: "Failed to authenticate" });
+        }
+    },
+]);
 
 // Derive __dirname in ES module
 const __filename = fileURLToPath(import.meta.url);

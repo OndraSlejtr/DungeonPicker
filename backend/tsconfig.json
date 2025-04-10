@@ -6,5 +6,6 @@
         "outDir": "./dist",
         "moduleResolution": "node",
         "resolveJsonModule": true,
+        "strict": true,
     }
 }
