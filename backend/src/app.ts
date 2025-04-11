@@ -7,7 +7,7 @@ import { fileURLToPath } from "url";
 
 import path from "path";
 import { Request, Response } from "express";
-import { logAxiosError } from "./logging/AxiosErrorLogger";
+import { logAxiosError } from "./logging/AxiosErrorLogger.js";
 
 const app = express();
 app.use(cookieParser());
