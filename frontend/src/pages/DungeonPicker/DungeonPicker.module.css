@@ -20,7 +20,7 @@
     width: 100%;
     margin: 10px 0;
     padding: 10px;
-    background-color: var(--button-text-green);
+    /* background-color: var(--button-text-green); */
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -116,4 +116,36 @@
 
 h2.full {
     color: var(--bright-jade-green);
+}
+
+.searchBarContainer {
+    position: relative;
+    width: 100%; /* Ensure it takes up the full width */
+}
+
+.searchBar {
+    width: 100%;
+    font-size: 1.2rem;
+    font-family: "Imer", sans-serif;
+    padding: 0.5rem 2.5rem 0.5rem 0.5rem; /* Add padding to the right for the clear button */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.clearButton {
+    position: absolute;
+    top: 50%;
+    right: 0.5rem;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: red;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0;
+}
+
+.clearButton:hover {
+    color: darkred;
 }

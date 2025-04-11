@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "./DungeonPicker.module.css";
-import { Dungeon, TWWDungeons, ExpansionName, dungeonsByExpansion } from "../../data/dungeons";
+import { Dungeon, TWWDungeons, ExpansionName, dungeonsByExpansion, allDungeons } from "../../data/dungeons";
 import ExpansionPanel from "./components/ExpansionPanel";
 import AvailableDungeonsPanel from "./components/AvailableDungeonsPanel";
 import SelectedDungeonsPanel from "./components/SelectedDungeonsPanel";
@@ -10,6 +10,7 @@ const MAX_SELECTION = 8;
 const DungeonPicker = () => {
     const [selectedDungeons, setSelectedDungeons] = useState<Dungeon[]>([]);
     const [availableDungeons, setAvailableDungeons] = useState<Dungeon[]>(TWWDungeons);
+    const [searchTerm, setSearchTerm] = useState("");
 
     const handleAddDungeon = (dungeon: Dungeon) => {
         if (
@@ -28,9 +29,22 @@ const DungeonPicker = () => {
         setAvailableDungeons(dungeonsByExpansion[expansion]);
     };
 
+    // Filter available dungeons based on the search term
+    useEffect(() => {
+        if (searchTerm.trim() === "") {
+            setAvailableDungeons(TWWDungeons); // Reset to default dungeons if search is empty
+        } else {
+            const regex = new RegExp(searchTerm, "i"); // Case-insensitive regex
+            setAvailableDungeons(() => allDungeons.filter((dungeon) => regex.test(dungeon.name)));
+        }
+    }, [searchTerm]);
+
     return (
         <div className={styles.container}>
-            <ExpansionPanel onExpansionChange={handleExpansionChange} />
+            <ExpansionPanel
+                onExpansionChange={handleExpansionChange}
+                onSearchChange={setSearchTerm} // Pass handler to update search term
+            />
             <AvailableDungeonsPanel
                 availableDungeons={availableDungeons}
                 selectedDungeons={selectedDungeons}

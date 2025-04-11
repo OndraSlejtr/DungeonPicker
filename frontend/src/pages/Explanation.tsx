@@ -203,7 +203,7 @@ const Explanation = () => {
     const navigate = useNavigate();
 
     return (
-        <div style={{ padding: "2rem", textAlign: "center" }}>
+        <div style={{ padding: "2rem", textAlign: "center", alignSelf: "center" }}>
             <h1 style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>What does your ideal M+ lineup look like?</h1>
 
             <WordCloud words={words} height="400px" width="1200px" />

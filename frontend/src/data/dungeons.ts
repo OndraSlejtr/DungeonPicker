@@ -10,25 +10,100 @@ type Expansion = {
     name: string;
     releaseOrder: number;
     shorthand: string;
+    color?: string;
 };
 
 export { type Dungeon, type Expansion };
 
-const TWW: Expansion = {
+const VANILLA: Expansion = {
     id: 1,
-    name: "The War Within",
-    releaseOrder: 10,
-    shorthand: "tww",
+    name: "Vanilla",
+    releaseOrder: 1,
+    shorthand: "vanilla",
+    color: "#D4AF37", // Gold, representing the classic and original feel
+};
+
+const TBC: Expansion = {
+    id: 2,
+    name: "The Burning Crusade",
+    releaseOrder: 2,
+    shorthand: "tbc",
+    color: "#228B22", // Forest green, representing Outland's lush and demonic themes
+};
+
+const WOTLK: Expansion = {
+    id: 3,
+    name: "Wrath of the Lich King",
+    releaseOrder: 3,
+    shorthand: "wotlk",
+    color: "#4682B4", // Steel blue, representing the icy and cold Northrend
+};
+
+const CATA: Expansion = {
+    id: 4,
+    name: "Cataclysm",
+    releaseOrder: 4,
+    shorthand: "cata",
+    color: "#FF4500", // Orange-red, representing fire and destruction caused by Deathwing
+};
+
+const MOP: Expansion = {
+    id: 5,
+    name: "Mists of Pandaria",
+    releaseOrder: 5,
+    shorthand: "mop",
+    color: "#32CD32", // Lime green, representing the lush and serene Pandaria
+};
+
+const WOD: Expansion = {
+    id: 6,
+    name: "Warlords of Draenor",
+    releaseOrder: 6,
+    shorthand: "wod",
+    color: "#8B4513", // Saddle brown, representing the rugged and savage Draenor
+};
+
+const LEGION: Expansion = {
+    id: 7,
+    name: "Legion",
+    releaseOrder: 7,
+    shorthand: "legion",
+    color: "#00FF00", // Bright green, representing the fel energy of the Burning Legion
+};
+
+const BFA: Expansion = {
+    id: 8,
+    name: "Battle for Azeroth",
+    releaseOrder: 8,
+    shorthand: "bfa",
+    color: "#1E90FF", // Dodger blue, representing the naval and faction war themes
+};
+
+const SL: Expansion = {
+    id: 9,
+    name: "Shadowlands",
+    releaseOrder: 9,
+    shorthand: "sl",
+    color: "#4B0082", // Indigo, representing the mysterious and otherworldly Shadowlands
 };
 
 const DF: Expansion = {
-    id: 2,
+    id: 10,
     name: "Dragonflight",
-    releaseOrder: 9,
+    releaseOrder: 10,
     shorthand: "df",
+    color: "#FF8C00", // Dark orange, representing the fiery and draconic themes
 };
 
-export const expansions = [TWW, DF];
+const TWW: Expansion = {
+    id: 11,
+    name: "The War Within",
+    releaseOrder: 11,
+    shorthand: "tww",
+    color: "#800000", // Maroon, representing the deep and internal conflict themes
+};
+
+export const expansions = [TWW, DF, SL, BFA, LEGION, WOD, MOP, CATA, WOTLK, TBC, VANILLA] as const;
 export type ExpansionName = (typeof expansions)[number]["shorthand"];
 
 export const TWWDungeons: Dungeon[] = [
@@ -76,3 +151,4 @@ export const DFDungeons: Dungeon[] = [
 ];
 
 export const dungeonsByExpansion: Record<ExpansionName, Dungeon[]> = { tww: TWWDungeons, df: DFDungeons };
+export const allDungeons = Object.values(dungeonsByExpansion).flatMap((dungeon) => dungeon);
