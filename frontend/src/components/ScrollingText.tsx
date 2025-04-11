@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./ScrollingText.module.css";
 
 interface ScrollingTextProps {
