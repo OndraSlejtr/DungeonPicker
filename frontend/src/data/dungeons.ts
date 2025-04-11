@@ -21,6 +21,13 @@ const TWW: Expansion = {
     jounralEntry: "tww",
 };
 
+const DF: Expansion = {
+    id: 2,
+    name: "Dragonflight",
+    releaseOrder: 9,
+    jounralEntry: "df",
+};
+
 export const TWWDungeons: Dungeon[] = [
     {
         id: 1,
@@ -41,4 +48,26 @@ export const TWWDungeons: Dungeon[] = [
     { id: 7, journalId: 5912544, name: "The Rookery", expansion: TWW },
     { id: 8, journalId: 6422410, name: "Operation: Floodgate", expansion: TWW },
     { id: 9, journalId: 5912537, name: "Ara-Kara, City of Echoes", expansion: TWW },
+];
+
+export const DFDungeons: Dungeon[] = [
+    {
+        id: 10,
+        journalId: 5912542,
+        name: "DFPriory of the Sacred Flame",
+        expansion: DF,
+    },
+    { id: 11, journalId: 5912539, name: "DFCity of Threads", expansion: DF },
+    { id: 12, journalId: 5912545, name: "DFThe Stonevault", expansion: DF },
+    {
+        id: 13,
+        journalId: 5912543,
+        name: "DFThe Dawnbreaker",
+        expansion: DF,
+    },
+    { id: 14, journalId: 5912538, name: "DFCinderbrew Meadery", expansion: DF },
+    { id: 15, journalId: 5912540, name: "DFDarkflame Cleft", expansion: DF },
+    { id: 16, journalId: 5912544, name: "DFThe Rookery", expansion: DF },
+    { id: 17, journalId: 6422410, name: "DFOperation: Floodgate", expansion: DF },
+    { id: 18, journalId: 5912537, name: "DFAra-Kara, City of Echoes", expansion: DF },
 ];

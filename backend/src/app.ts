@@ -32,8 +32,6 @@ const guildId = process.env.ZEN_GUILD_ID || "824215968724942878";
 app.get("/api/auth/user", async (req: Request, res: Response) => {
     const accessToken = req.cookies.access_token;
 
-    console.log("Access Token:", accessToken);
-
     if (!accessToken) {
         res.status(401).json({ error: "Unauthorized" });
         return;
