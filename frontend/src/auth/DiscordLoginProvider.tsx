@@ -1,8 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import { DiscordLoginContext, UserData } from "./DiscordLoginContext";
 import axios from "axios";
-
-const backendUrl = import.meta.env.VITE_BACKEND_URL || "";
+import { backendUrl } from "../utils/environment";
 
 export const DiscordLoginProvider = ({ children }: { children: ReactNode }) => {
     const [userData, setUserData] = useState<UserData | null>(null);

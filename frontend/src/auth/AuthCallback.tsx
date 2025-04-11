@@ -3,8 +3,7 @@ import axios from "axios";
 
 import { useNavigate } from "react-router-dom";
 import { useDiscordLogin } from "./DiscordLoginContext";
-
-const backendUrl = import.meta.env.VITE_BACKEND_URL || "";
+import { backendUrl } from "../utils/environment";
 
 const Auth = () => {
     const [authCode, setAuthCode] = useState<string | null>(null);

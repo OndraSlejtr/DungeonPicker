@@ -1,13 +1,14 @@
 import { NavLink } from "react-router-dom";
 import { useDiscordLogin } from "../auth/DiscordLoginContext";
 import styles from "./Header.module.css";
+import { backendUrl } from "../utils/environment";
 
 const Header = () => {
     const { userData, isAuthenticated } = useDiscordLogin();
 
     const handleLogout = async () => {
         try {
-            await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/logout`, {
+            await fetch(`${backendUrl}/api/auth/logout`, {
                 method: "POST",
                 credentials: "include",
             });
