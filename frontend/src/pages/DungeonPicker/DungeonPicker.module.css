@@ -15,11 +15,6 @@
     text-align: center;
 }
 
-.expansionPanel h2 {
-    margin-bottom: 10px;
-    color: var(--gold);
-}
-
 .expansionButton {
     display: block;
     width: 100%;
@@ -50,9 +45,10 @@
 }
 
 .selectionPanel h2,
-.dropPanel h2 {
+.dropPanel h2,
+.expansionPanel h2 {
     margin-bottom: 10px;
-    color: var(--gold);
+    color: #ffffff;
     text-align: center;
 }
 
@@ -116,4 +112,8 @@
     font-size: 1.2rem;
     text-align: center;
     margin: auto;
+}
+
+h2.full {
+    color: var(--bright-jade-green);
 }

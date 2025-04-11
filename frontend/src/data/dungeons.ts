@@ -9,7 +9,7 @@ type Expansion = {
     id: number;
     name: string;
     releaseOrder: number;
-    jounralEntry: string;
+    shorthand: string;
 };
 
 export { type Dungeon, type Expansion };
@@ -18,15 +18,18 @@ const TWW: Expansion = {
     id: 1,
     name: "The War Within",
     releaseOrder: 10,
-    jounralEntry: "tww",
+    shorthand: "tww",
 };
 
 const DF: Expansion = {
     id: 2,
     name: "Dragonflight",
     releaseOrder: 9,
-    jounralEntry: "df",
+    shorthand: "df",
 };
+
+export const expansions = [TWW, DF];
+export type ExpansionName = (typeof expansions)[number]["shorthand"];
 
 export const TWWDungeons: Dungeon[] = [
     {
@@ -71,3 +74,5 @@ export const DFDungeons: Dungeon[] = [
     { id: 17, journalId: 6422410, name: "DFOperation: Floodgate", expansion: DF },
     { id: 18, journalId: 5912537, name: "DFAra-Kara, City of Echoes", expansion: DF },
 ];
+
+export const dungeonsByExpansion: Record<ExpansionName, Dungeon[]> = { tww: TWWDungeons, df: DFDungeons };
