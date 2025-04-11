@@ -3,7 +3,7 @@
     "license": "UNLICENSED",
     "type": "module",
     "scripts": {
-        "start": "pnpm recursive run start",
+        "start": "pnpm --filter dp_backend start & pnpm --filter dp_frontend build --watch  > /dev/null 2>&1 ",
         "build": "pnpm --filter dp_frontend build && pnpm --filter dp_backend build && rimraf backend/dist/fe-dist && mkdirp backend/dist/fe-dist && cp -r frontend/dist/* backend/dist/fe-dist/",
         "start:prod": "node backend/dist/index.js"
     },

@@ -7,6 +7,7 @@ import { fileURLToPath } from "url";
 
 import path from "path";
 import { Request, Response } from "express";
+import { logAxiosError } from "./logging/AxiosErrorLogger";
 
 const app = express();
 app.use(cookieParser());
@@ -59,21 +60,21 @@ app.get("/api/auth/user", async (req: Request, res: Response) => {
             return;
         }
 
-        const memberResponse = await axios.get(`https://discord.com/api/v10/guilds/${guildId}/members/@me`, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        });
-
-        const memberData = memberResponse.data;
+        // TODO: Get nickname, need to setup bot on server
+        // const memberResponse = await axios.get(`https://discord.com/api/v10/guilds/${guildId}/members/@me`, {
+        //     headers: {
+        //         Authorization: `Bearer ${accessToken}`,
+        //     },
+        // });
+        // const memberData = memberResponse.data;
 
         // Extract the nickname or fallback to username
-        const nickname = memberData.nick || memberData.user.username;
+        // const nickname = memberData.nick || memberData.user.username;
 
-        res.status(200).json({ ...userResponse.data, guildNickname: nickname });
+        res.status(200).json(userResponse.data);
         return;
     } catch (err) {
-        console.error("Error fetching user data:", err);
+        logAxiosError(err, "Error fetching user data:");
         res.status(500).json({ error: "Failed to fetch user data" });
         return;
     }
@@ -118,7 +119,7 @@ app.post("/api/auth/refresh", [
 
             res.status(200).json({ message: "Token refreshed successfully" });
         } catch (err) {
-            console.error("Error refreshing token:", err);
+            logAxiosError(err, "Error refreshing token");
             res.status(500).json({ error: "Failed to refresh token" });
         }
     },
@@ -164,11 +165,24 @@ app.post("/api/auth/callback", [
 
             res.status(200).json({ message: "Authentication successful" });
         } catch (err) {
-            console.error("Error exchanging code for token:", err);
+            logAxiosError(err, "Error exchanging code for token");
             res.status(500).json({ error: "Failed to authenticate" });
         }
     },
 ]);
+
+app.post("/api/auth/logout", (req: Request, res: Response) => {
+    res.clearCookie("access_token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+    });
+    res.clearCookie("refresh_token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+    });
+
+    res.status(200).json({ message: "Logged out successfully" });
+});
 
 // Derive __dirname in ES module
 const __filename = fileURLToPath(import.meta.url);
