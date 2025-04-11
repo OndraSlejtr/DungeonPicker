@@ -7,11 +7,11 @@ import { useDiscordLogin } from "./DiscordLoginContext";
 const backendUrl = import.meta.env.VITE_BACKEND_URL || "";
 
 const Auth = () => {
-    const { setUserData } = useDiscordLogin();
     const [authCode, setAuthCode] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     const navigate = useNavigate();
+    const { setIsAuthenticated, setUserData } = useDiscordLogin();
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -35,9 +35,11 @@ const Auth = () => {
                     const user = userResponse.data;
 
                     setUserData(user);
+                    setIsAuthenticated(true);
                     navigate("/");
                 } catch (err) {
                     setError("Failed to authenticate.");
+                    setIsAuthenticated(false);
                     console.error(err);
                 }
             };

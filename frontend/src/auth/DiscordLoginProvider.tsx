@@ -2,6 +2,8 @@ import { ReactNode, useEffect, useState } from "react";
 import { DiscordLoginContext, UserData } from "./DiscordLoginContext";
 import axios from "axios";
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL || "";
+
 export const DiscordLoginProvider = ({ children }: { children: ReactNode }) => {
     const [userData, setUserData] = useState<UserData | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -10,7 +12,7 @@ export const DiscordLoginProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await axios.get<UserData>(`${import.meta.env.VITE_BACKEND_URL}/api/auth/user`, {
+                const response = await axios.get<UserData>(`${backendUrl}/api/auth/user`, {
                     withCredentials: true,
                 });
                 setUserData(response.data);
@@ -28,7 +30,7 @@ export const DiscordLoginProvider = ({ children }: { children: ReactNode }) => {
     }, []);
 
     return (
-        <DiscordLoginContext.Provider value={{ userData, setUserData, isAuthenticated, isLoading }}>
+        <DiscordLoginContext.Provider value={{ userData, setUserData, isAuthenticated, isLoading, setIsAuthenticated }}>
             {children}
         </DiscordLoginContext.Provider>
     );

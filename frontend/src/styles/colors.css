@@ -1,0 +1,23 @@
+:root {
+    /* Primary Colors */
+    --jade-green: #165f40;
+    --gold: #ffd700;
+
+    /* Secondary Colors */
+    --light-gold: #f0e68c;
+    --dark-jade-green: #0f2e26;
+    --muted-dark-gray: #1c1c1c;
+
+    /* Button Colors */
+    --button-hover-gold: #e6b800;
+    --button-text-green: #165f40;
+
+    /* Borders and Highlights */
+    --soft-jade-green: #3c9d7a;
+    --bright-jade-green: #4ca57e;
+    --pastel-jade-green: #6bc298;
+
+    /* Text Colors */
+    --text-light-gold: #f0e68c;
+    --text-white: #ffffff;
+}

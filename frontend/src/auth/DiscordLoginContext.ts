@@ -10,6 +10,7 @@ export interface UserData {
 export interface DiscordLoginContextType {
     userData: UserData | null;
     setUserData: (data: UserData | null) => void;
+    setIsAuthenticated: (isAuthenticated: boolean) => void;
     isAuthenticated: boolean;
     isLoading: boolean;
 }
