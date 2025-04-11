@@ -1,0 +1,41 @@
+.container {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    display: flex;
+    flex-direction: column; /* Stack lines vertically */
+    justify-content: space-evenly; /* Space lines evenly within the container */
+    align-items: flex-start; /* Align lines to the left */
+    background-color: var(--muted-dark-gray); /* Optional background color */
+}
+
+.line {
+    white-space: nowrap;
+    animation: scroll linear infinite;
+}
+
+.left {
+    animation-name: scroll-left;
+}
+
+.right {
+    animation-name: scroll-right;
+}
+
+@keyframes scroll-left {
+    from {
+        transform: translateX(100%); /* Start off-screen to the right */
+    }
+    to {
+        transform: translateX(-100%); /* End off-screen to the left */
+    }
+}
+
+@keyframes scroll-right {
+    from {
+        transform: translateX(-100%); /* Start off-screen to the left */
+    }
+    to {
+        transform: translateX(100%); /* End off-screen to the right */
+    }
+}

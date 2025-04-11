@@ -1,7 +1,6 @@
 .container {
     max-width: 1280px; /* Maximum width */
     margin: 0 auto; /* Center horizontally */
-    padding: 20px; /* Add some padding */
     display: flex;
     flex-direction: column;
     align-items: center; /* Center content horizontally */

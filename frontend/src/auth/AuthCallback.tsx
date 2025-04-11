@@ -46,7 +46,7 @@ const Auth = () => {
 
             authenticate();
         }
-    }, [authCode, navigate, setUserData]);
+    }, [authCode, navigate, setUserData, setIsAuthenticated]);
 
     if (!error) {
         <>Authenticating...</>;

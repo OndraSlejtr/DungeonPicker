@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import { useDiscordLogin } from "../auth/DiscordLoginContext";
 import styles from "./Header.module.css";
 
@@ -22,15 +23,12 @@ const Header = () => {
                 <h1 className={styles.title}>DungeonPicker</h1>
             </div>
             <nav className={styles.nav}>
-                <a href="/" className={styles.link}>
-                    Home
-                </a>
-                <a href="/about" className={styles.link}>
-                    About
-                </a>
-                <a href="/dungeons" className={styles.link}>
-                    Dungeons
-                </a>
+                <NavLink to={"/pick"} className={styles.link}>
+                    Pick
+                </NavLink>
+                <NavLink to={"/vote"} className={styles.link}>
+                    Vote
+                </NavLink>
             </nav>
             <div className={styles.userSection}>
                 {isAuthenticated && (

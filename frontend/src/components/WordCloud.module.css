@@ -1,0 +1,17 @@
+.wordCloud {
+    position: relative;
+    overflow: hidden;
+    margin: 50px;
+}
+
+.word {
+    position: absolute;
+    color: var(--soft-jade-green); /* Gold text color */
+    font-weight: bold;
+    white-space: nowrap;
+    transition: transform 0.2s ease-in-out;
+}
+
+.word:hover {
+    transform: scale(1.1); /* Slight zoom effect on hover */
+}
