@@ -14,6 +14,7 @@ const DungeonPicker = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [submissionStatus, setSubmissionStatus] = useState<"idle" | "success" | "error">("idle");
     const [toastMessage, setToastMessage] = useState<string | null>(null);
+    const [loadingPreviousEntry, setLoadingPreviousEntry] = useState<boolean>(false);
 
     const handleAddDungeon = (dungeon: Dungeon) => {
         if (
@@ -52,6 +53,27 @@ const DungeonPicker = () => {
         setTimeout(() => setToastMessage(null), 5000);
     };
 
+    // Fetch previously selected dungeons on component load
+    useEffect(() => {
+        const fetchSelectedDungeons = async () => {
+            setLoadingPreviousEntry(true); // Set loading state to true
+            try {
+                const response = await axios.get("/api/dungeons", { withCredentials: true });
+                if (response.data?.dungeons) {
+                    const dungeonIds = response.data.dungeons;
+                    const previouslySelected = allDungeons.filter((dungeon) => dungeonIds.includes(dungeon.id));
+                    setSelectedDungeons(previouslySelected);
+                    setSubmissionStatus("success"); // Indicate that we're updating a previous choice
+                }
+            } catch (error) {
+                console.error("Error fetching previously selected dungeons:", error);
+            }
+            setLoadingPreviousEntry(false); // Reset loading state
+        };
+
+        fetchSelectedDungeons();
+    }, []);
+
     // Filter available dungeons based on the search term
     useEffect(() => {
         if (searchTerm.trim() === "") {
@@ -84,6 +106,7 @@ const DungeonPicker = () => {
                 maxSelection={MAX_SELECTION}
                 onRemoveDungeon={handleRemoveDungeon}
                 submissionStatus={submissionStatus} // Pass submission status
+                loadingStatus={loadingPreviousEntry}
             />
         </div>
     );

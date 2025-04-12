@@ -278,7 +278,7 @@ app.get("/api/dungeons", async (req: Request, res: Response) => {
         const { data, error } = await supabase
             .from("DungeonSubmissions")
             .select("*")
-            .eq("author_discord_id", userInfo.data?.id) // Filter by the user's Discord ID
+            .eq("author_discord_id", userInfo.data?.username) // Filter by the user's Discord ID
             .order("created_at", { ascending: false }) // Order by newest first
             .limit(1); // Get only the newest submission
 

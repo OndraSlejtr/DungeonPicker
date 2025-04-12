@@ -7,6 +7,7 @@ interface SelectedDungeonsPanelProps {
     onRemoveDungeon: (dungeonId: number) => void;
     onSubmitSelection: () => void;
     submissionStatus: "idle" | "success" | "error"; // New prop for submission status
+    loadingStatus: boolean;
 }
 
 const SelectedDungeonsPanel = ({
@@ -15,6 +16,7 @@ const SelectedDungeonsPanel = ({
     onRemoveDungeon,
     onSubmitSelection,
     submissionStatus,
+    loadingStatus,
 }: SelectedDungeonsPanelProps) => {
     const getImageUrl = (name: string, expansion: string) => {
         return new URL(`../../../assets/dungeons/${expansion}/${name}.png`, import.meta.url).href;
