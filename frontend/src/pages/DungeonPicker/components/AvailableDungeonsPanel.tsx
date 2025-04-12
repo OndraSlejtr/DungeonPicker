@@ -6,6 +6,7 @@ interface AvailableDungeonsPanelProps {
     selectedDungeons: Dungeon[];
     maxSelection: number;
     onAddDungeon: (dungeon: Dungeon) => void;
+    searchTerm: string; // New prop for the search term
 }
 
 const AvailableDungeonsPanel = ({
@@ -13,6 +14,7 @@ const AvailableDungeonsPanel = ({
     selectedDungeons,
     maxSelection,
     onAddDungeon,
+    searchTerm,
 }: AvailableDungeonsPanelProps) => {
     const getImageUrl = (name: string, expansion: string) => {
         return new URL(`../../../assets/dungeons/${expansion}/${name}.png`, import.meta.url).href;
@@ -20,7 +22,7 @@ const AvailableDungeonsPanel = ({
 
     return (
         <div className={styles.selectionPanel}>
-            <h2>Available Dungeons</h2>
+            <h2>{searchTerm.trim() ? `Search: ${searchTerm}` : "Available Dungeons"}</h2>
             <ul className={styles.dungeonList}>
                 {availableDungeons.map((dungeon) => {
                     const isSelected = selectedDungeons.some((selected) => selected.id === dungeon.id);

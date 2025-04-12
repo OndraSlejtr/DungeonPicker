@@ -4,7 +4,6 @@ import { Dungeon, TWWDungeons, ExpansionName, dungeonsByExpansion, allDungeons }
 import ExpansionPanel from "./components/ExpansionPanel";
 import AvailableDungeonsPanel from "./components/AvailableDungeonsPanel";
 import SelectedDungeonsPanel from "./components/SelectedDungeonsPanel";
-import ConfirmationPanel from "./components/ConfirmationPanel";
 
 const MAX_SELECTION = 8;
 
@@ -30,10 +29,6 @@ const DungeonPicker = () => {
         setAvailableDungeons(dungeonsByExpansion[expansion]);
     };
 
-    const handleSubmitSelection = () => {
-        alert("Selection submitted! You can change it later.");
-    };
-
     // Filter available dungeons based on the search term
     useEffect(() => {
         if (searchTerm.trim() === "") {
@@ -55,19 +50,13 @@ const DungeonPicker = () => {
                 selectedDungeons={selectedDungeons}
                 maxSelection={MAX_SELECTION}
                 onAddDungeon={handleAddDungeon}
+                searchTerm={searchTerm} // Pass the search term
             />
             <SelectedDungeonsPanel
                 selectedDungeons={selectedDungeons}
                 maxSelection={MAX_SELECTION}
                 onRemoveDungeon={handleRemoveDungeon}
             />
-            <div
-                className={`${styles.confirmationPanel} ${
-                    selectedDungeons.length === MAX_SELECTION ? styles.active : styles.inactive
-                }`}
-            >
-                <ConfirmationPanel onSubmit={handleSubmitSelection} />
-            </div>
         </div>
     );
 };

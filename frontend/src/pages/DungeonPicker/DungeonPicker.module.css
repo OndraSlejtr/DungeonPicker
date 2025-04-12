@@ -25,11 +25,10 @@
 
 .expansionPanel,
 .selectionPanel,
-.dropPanel,
-.confirmationPanel {
+.dropPanel {
     flex: 1;
     border-radius: 8px;
-    padding: 20px;
+    padding: 5px 20px;
     background-color: var(--muted-dark-gray);
     /* overflow-y: auto; */
     height: 100%;
@@ -61,6 +60,7 @@
     margin-bottom: 10px;
     color: #ffffff;
     text-align: center;
+    padding-bottom: 20px;
 }
 
 .dungeonList {
@@ -159,39 +159,4 @@ h2.full {
 
 .clearButton:hover {
     color: darkred;
-}
-
-.inactive {
-    display: none; /* Hidden by default */
-}
-
-.active {
-    display: block; /* Show when active */
-}
-
-.confirmationPanel h2 {
-    color: var(--jade-green);
-    margin-bottom: 1rem;
-}
-
-.confirmationPanel p {
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-    color: var(--light-gold);
-}
-
-.confirmButton {
-    width: 100%;
-    padding: 0.5rem;
-    background-color: var(--jade-green);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.confirmButton:hover {
-    background-color: var(--dark-jade-green);
 }
