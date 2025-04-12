@@ -13,6 +13,7 @@ const DungeonPicker = () => {
     const [availableDungeons, setAvailableDungeons] = useState<Dungeon[]>(TWWDungeons);
     const [searchTerm, setSearchTerm] = useState("");
     const [submissionStatus, setSubmissionStatus] = useState<"idle" | "success" | "error">("idle");
+    const [toastMessage, setToastMessage] = useState<string | null>(null);
 
     const handleAddDungeon = (dungeon: Dungeon) => {
         if (
@@ -40,10 +41,15 @@ const DungeonPicker = () => {
                 { withCredentials: true } // Include cookies in the request
             );
             setSubmissionStatus("success"); // Update status to success
+            setToastMessage("Dungeon selection submitted successfully!");
         } catch (error) {
             console.error("Error submitting dungeon selection:", error);
             setSubmissionStatus("error"); // Update status to error
+            setToastMessage("Failed to submit dungeon selection. Please try again.");
         }
+
+        // Automatically hide the toast after 5 seconds
+        setTimeout(() => setToastMessage(null), 5000);
     };
 
     // Filter available dungeons based on the search term
@@ -58,6 +64,9 @@ const DungeonPicker = () => {
 
     return (
         <div className={styles.container}>
+            {/* Toast Notification */}
+            {toastMessage && <div className={styles.toast}>{toastMessage}</div>}
+
             <ExpansionPanel
                 onExpansionChange={handleExpansionChange}
                 onSearchChange={setSearchTerm} // Pass handler to update search term
