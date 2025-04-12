@@ -161,6 +161,22 @@ h2.full {
     color: darkred;
 }
 
+@keyframes bounce {
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
 .submitButton {
     display: block;
     width: 100%;
@@ -173,6 +189,7 @@ h2.full {
     cursor: pointer;
     text-align: center;
     transition: background-color 0.3s ease;
+    animation: bounce 1.6s ease infinite; /* Apply the bounce animation */
     height: 70px;
     margin-bottom: 16px;
     font-size: 1.25rem;

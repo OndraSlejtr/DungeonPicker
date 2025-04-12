@@ -53,6 +53,7 @@ const DungeonPicker = () => {
                 searchTerm={searchTerm} // Pass the search term
             />
             <SelectedDungeonsPanel
+                onSubmitSelection={() => alert("Selection submitted!")}
                 selectedDungeons={selectedDungeons}
                 maxSelection={MAX_SELECTION}
                 onRemoveDungeon={handleRemoveDungeon}
