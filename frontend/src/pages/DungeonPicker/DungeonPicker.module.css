@@ -160,3 +160,24 @@ h2.full {
 .clearButton:hover {
     color: darkred;
 }
+
+.submitButton {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: var(--jade-green);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    height: 70px;
+    margin-bottom: 16px;
+    font-size: 1.25rem;
+}
+
+.submitButton:hover {
+    background-color: var(--pastel-jade-green);
+}
