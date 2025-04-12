@@ -1,17 +1,39 @@
+/* Default layout: side-by-side panels */
 .container {
     display: flex;
     gap: 20px;
     padding: 0 20px;
 }
 
-.expansionPanel {
+/* Responsive layout for small viewports */
+@media (max-width: 1080px) {
+    .container {
+        flex-direction: column; /* Stack panels vertically */
+    }
+
+    .expansionPanel {
+        width: 100%; /* Take up the full width */
+        margin-bottom: 20px; /* Add spacing below the expansion panel */
+    }
+
+    .selectionPanel,
+    .dropPanel,
+    .confirmationPanel {
+        width: 100%; /* Take up the full width */
+    }
+}
+
+.expansionPanel,
+.selectionPanel,
+.dropPanel,
+.confirmationPanel {
     flex: 1;
     border-radius: 8px;
     padding: 20px;
     background-color: var(--muted-dark-gray);
     overflow-y: auto;
     height: 100%;
-    min-width: 200px;
+    min-width: 300px;
     text-align: center;
 }
 
@@ -31,17 +53,6 @@
 
 .expansionButton:hover {
     background-color: var(--bright-jade-green);
-}
-
-.selectionPanel,
-.dropPanel {
-    flex: 1;
-    border-radius: 8px;
-    padding: 20px;
-    background-color: var(--muted-dark-gray);
-    overflow-y: auto;
-    height: 100%;
-    min-width: 300px;
 }
 
 .selectionPanel h2,
@@ -150,24 +161,12 @@ h2.full {
     color: darkred;
 }
 
-.confirmationPanel {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 300px;
-    padding: 1rem;
-    background-color: var(--muted-dark-gray);
-    color: white;
-    border-left: 2px solid var(--jade-green);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    transform: translateX(100%); /* Start off-screen */
-    opacity: 0; /* Start invisible */
-    transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth slide-in transition */
+.inactive {
+    display: none; /* Hidden by default */
 }
 
-.confirmationPanel.slideIn {
-    transform: translateX(0); /* Slide into view */
-    opacity: 1; /* Fade in */
+.active {
+    display: block; /* Show when active */
 }
 
 .confirmationPanel h2 {

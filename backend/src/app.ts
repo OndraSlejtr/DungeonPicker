@@ -195,6 +195,14 @@ const isDevelopment = environment === "development";
 const frontendPath = path.join(__dirname, isDevelopment ? "../../frontend/dist" : "./fe-dist");
 app.use(express.static(frontendPath));
 
+const cacheTime = 86400000 * 30; // the time you want
+
+app.use(
+    express.static(path.join(__dirname, isDevelopment ? "../../frontend/dist" : "./fe-dist", "public"), {
+        maxAge: cacheTime,
+    })
+);
+
 // Catch-all route to serve the frontend's index.html for any unmatched routes
 app.get("*name", (req, res) => {
     res.sendFile(path.join(frontendPath, "index.html"));

@@ -61,7 +61,13 @@ const DungeonPicker = () => {
                 maxSelection={MAX_SELECTION}
                 onRemoveDungeon={handleRemoveDungeon}
             />
-            {selectedDungeons.length === MAX_SELECTION && <ConfirmationPanel onSubmit={handleSubmitSelection} />}
+            <div
+                className={`${styles.confirmationPanel} ${
+                    selectedDungeons.length === MAX_SELECTION ? styles.active : styles.inactive
+                }`}
+            >
+                <ConfirmationPanel onSubmit={handleSubmitSelection} />
+            </div>
         </div>
     );
 };

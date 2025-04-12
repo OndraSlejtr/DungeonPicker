@@ -6,7 +6,7 @@ interface ConfirmationPanelProps {
 
 const ConfirmationPanel = ({ onSubmit }: ConfirmationPanelProps) => {
     return (
-        <div className={`${styles.confirmationPanel} ${styles.slideIn}`}>
+        <div className={`${styles.confirmationPanel} `}>
             <h2>Confirm Your Selection</h2>
             <p>You have selected all 8 dungeons. You can change this selection later.</p>
             <button className={styles.confirmButton} onClick={onSubmit}>
