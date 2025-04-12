@@ -8,8 +8,9 @@ interface SelectedDungeonsPanelProps {
 }
 
 const SelectedDungeonsPanel = ({ selectedDungeons, maxSelection, onRemoveDungeon }: SelectedDungeonsPanelProps) => {
-    const getImageUrl = (name: string) => new URL(`../../../assets/dungeons/tww/${name}.png`, import.meta.url).href;
-
+    const getImageUrl = (name: string, expansion: string) => {
+        return new URL(`../../../assets/dungeons/${expansion}/${name}.png`, import.meta.url).href;
+    };
     return (
         <div className={styles.dropPanel}>
             <h2 className={selectedDungeons.length === maxSelection ? styles.full : ""}>
@@ -24,7 +25,10 @@ const SelectedDungeonsPanel = ({ selectedDungeons, maxSelection, onRemoveDungeon
                             <div
                                 className={styles.dungeon}
                                 style={{
-                                    backgroundImage: `url(${getImageUrl(dungeon.journalId + "")})`,
+                                    backgroundImage: `url(${getImageUrl(
+                                        dungeon.journalId + "",
+                                        dungeon.expansion.shorthand
+                                    )})`,
                                 }}
                             >
                                 <span className={styles.dungeonName}>{dungeon.name}</span>

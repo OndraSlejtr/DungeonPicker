@@ -4,6 +4,7 @@ import { Dungeon, TWWDungeons, ExpansionName, dungeonsByExpansion, allDungeons }
 import ExpansionPanel from "./components/ExpansionPanel";
 import AvailableDungeonsPanel from "./components/AvailableDungeonsPanel";
 import SelectedDungeonsPanel from "./components/SelectedDungeonsPanel";
+import ConfirmationPanel from "./components/ConfirmationPanel";
 
 const MAX_SELECTION = 8;
 
@@ -27,6 +28,10 @@ const DungeonPicker = () => {
 
     const handleExpansionChange = (expansion: ExpansionName) => {
         setAvailableDungeons(dungeonsByExpansion[expansion]);
+    };
+
+    const handleSubmitSelection = () => {
+        alert("Selection submitted! You can change it later.");
     };
 
     // Filter available dungeons based on the search term
@@ -56,6 +61,7 @@ const DungeonPicker = () => {
                 maxSelection={MAX_SELECTION}
                 onRemoveDungeon={handleRemoveDungeon}
             />
+            {selectedDungeons.length === MAX_SELECTION && <ConfirmationPanel onSubmit={handleSubmitSelection} />}
         </div>
     );
 };

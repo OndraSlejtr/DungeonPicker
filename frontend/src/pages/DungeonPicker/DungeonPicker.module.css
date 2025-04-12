@@ -149,3 +149,50 @@ h2.full {
 .clearButton:hover {
     color: darkred;
 }
+
+.confirmationPanel {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 300px;
+    padding: 1rem;
+    background-color: var(--muted-dark-gray);
+    color: white;
+    border-left: 2px solid var(--jade-green);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transform: translateX(100%); /* Start off-screen */
+    opacity: 0; /* Start invisible */
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth slide-in transition */
+}
+
+.confirmationPanel.slideIn {
+    transform: translateX(0); /* Slide into view */
+    opacity: 1; /* Fade in */
+}
+
+.confirmationPanel h2 {
+    color: var(--jade-green);
+    margin-bottom: 1rem;
+}
+
+.confirmationPanel p {
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: var(--light-gold);
+}
+
+.confirmButton {
+    width: 100%;
+    padding: 0.5rem;
+    background-color: var(--jade-green);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.confirmButton:hover {
+    background-color: var(--dark-jade-green);
+}
