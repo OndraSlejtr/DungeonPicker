@@ -56,42 +56,52 @@ type Result<T> =
     | { data: T; error?: null } // Success case: data is present, error is null
     | { data?: null | undefined; error: string; errorCode: number }; // Error case: error is present, data is null
 
+const cache = new Map<string, { data: DiscordUser; expiry: number }>();
+
 const getUserInfo = async (accessToken: string): Promise<Result<DiscordUser>> => {
-    const userResponse = await axios.get("https://discord.com/api/v10/users/@me", {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    });
+    const now = Date.now();
 
-    const guildsResponse = await axios.get("https://discord.com/api/v10/users/@me/guilds", {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-        },
-    });
-
-    const guilds = guildsResponse.data;
-
-    // Check if the user is part of the specified guild
-    const guildMembership = guilds.find((guild: { id: string }) => guild.id === guildId);
-
-    if (!guildMembership) {
-        // res.status(401).json({ error: "User is not part of the guild." });
-        // return null;
-        return { error: "User is not part of the guild.", errorCode: 401, data: null };
+    // Check if the access token is already cached and not expired
+    if (cache.has(accessToken)) {
+        const cached = cache.get(accessToken);
+        if (cached && cached.expiry > now) {
+            console.log("Using cached user data for access token:", accessToken);
+            return { data: cached.data }; // Return cached data
+        }
     }
 
-    // TODO: Get nickname, need to setup bot on server
-    // const memberResponse = await axios.get(`https://discord.com/api/v10/guilds/${guildId}/members/@me`, {
-    //     headers: {
-    //         Authorization: `Bearer ${accessToken}`,
-    //     },
-    // });
-    // const memberData = memberResponse.data;
+    try {
+        const userResponse = await axios.get("https://discord.com/api/v10/users/@me", {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
 
-    // Extract the nickname or fallback to username
-    // const nickname = memberData.nick || memberData.user.username;
+        const guildsResponse = await axios.get("https://discord.com/api/v10/users/@me/guilds", {
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        });
 
-    return { data: userResponse.data };
+        const guilds = guildsResponse.data;
+
+        // Check if the user is part of the specified guild
+        const guildMembership = guilds.find((guild: { id: string }) => guild.id === guildId);
+
+        if (!guildMembership) {
+            return { error: "User is not part of the guild.", errorCode: 401, data: null };
+        }
+
+        const userData: DiscordUser = userResponse.data;
+
+        // Cache the response with a 1-hour expiry
+        cache.set(accessToken, { data: userData, expiry: now + 60 * 60 * 1000 });
+
+        return { data: userData };
+    } catch (err) {
+        logAxiosError(err, "Error fetching user data:");
+        return { error: "Failed to fetch user data", errorCode: 500, data: null };
+    }
 };
 
 app.get("/api/auth/user", async (req: Request, res: Response) => {
