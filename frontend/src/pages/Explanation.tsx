@@ -206,8 +206,16 @@ const Explanation = () => {
         <div style={{ padding: "2rem", textAlign: "center", alignSelf: "center" }}>
             <h1 style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>What does your ideal M+ lineup look like?</h1>
 
-            <WordCloud words={words} height="400px" width="1200px" />
-            {/* <ScrollingText lines={lines} height="300px" /> */}
+            {/* WordCloud with responsive width */}
+            <div
+                style={{
+                    width: "100%",
+                    maxWidth: "1200px", // Limit the maximum width for larger screens
+                    margin: "0 auto", // Center the WordCloud
+                }}
+            >
+                <WordCloud words={words} height="400px" width="100%" />
+            </div>
 
             <Button onClick={() => navigate("/pick")}>Get Picking »</Button>
             <p style={{ fontSize: "1rem", marginBottom: "2rem" }}>

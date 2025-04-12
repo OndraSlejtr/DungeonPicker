@@ -22,7 +22,7 @@ const AvailableDungeonsPanel = ({
 
     return (
         <div className={styles.selectionPanel}>
-            <h2>{searchTerm.trim() ? `Search: ${searchTerm}` : "Available Dungeons"}</h2>
+            <h2>{searchTerm.trim() ? `Search: ${searchTerm}` : "Dungeons"}</h2>
             <ul className={styles.dungeonList}>
                 {availableDungeons.map((dungeon) => {
                     const isSelected = selectedDungeons.some((selected) => selected.id === dungeon.id);

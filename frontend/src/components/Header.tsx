@@ -28,7 +28,7 @@ const Header = () => {
                     Pick
                 </NavLink>
                 <NavLink to={"/vote"} className={styles.link}>
-                    Vote
+                    Voting starts in
                 </NavLink>
             </nav>
             <div className={styles.userSection}>

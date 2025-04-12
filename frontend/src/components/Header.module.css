@@ -57,6 +57,18 @@
     font-size: 1rem;
 }
 
+/* Hide "Logged in as XYZ" on mobile devices */
+@media (max-width: 768px) {
+    .username {
+        display: none;
+    }
+
+    .header {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+}
+
 .logoutButton {
     background-color: var(--button-text-green); /* Gold */
     color: #ffffff; /* Jade green text */
