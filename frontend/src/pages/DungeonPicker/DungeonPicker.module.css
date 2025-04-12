@@ -5,7 +5,7 @@
 }
 
 /* Responsive layout for small viewports */
-@media (max-width: 768px) {
+@media (max-width: 1000px) {
     .container {
         flex-direction: column; /* Stack panels vertically */
     }
@@ -31,8 +31,7 @@
     background-color: var(--muted-dark-gray);
     /* overflow-y: auto; */
     height: 100%;
-    min-width: 200px;
-    max-width: 300px;
+    width: 300px;
     text-align: center;
 }
 

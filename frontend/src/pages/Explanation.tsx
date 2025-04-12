@@ -204,7 +204,9 @@ const Explanation = () => {
 
     return (
         <div style={{ padding: "2rem", textAlign: "center", alignSelf: "center" }}>
-            <h1 style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>What does your ideal M+ lineup look like?</h1>
+            <h1 style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>
+                What are perfect 8 Mythic+ dungeons for a season?
+            </h1>
 
             {/* WordCloud with responsive width */}
             <div
@@ -217,9 +219,9 @@ const Explanation = () => {
                 <WordCloud words={words} height="400px" width="100%" />
             </div>
 
-            <Button onClick={() => navigate("/pick")}>Get Picking »</Button>
+            <Button onClick={() => navigate("/pick")}>Pick you 8 dungeons »</Button>
             <p style={{ fontSize: "1rem", marginBottom: "2rem" }}>
-                Once submissions close, you can vote on your favorites in tournament style bracket.
+                Once submissions close, everyone can vote on best Pick in tournament style bracket.
             </p>
         </div>
     );

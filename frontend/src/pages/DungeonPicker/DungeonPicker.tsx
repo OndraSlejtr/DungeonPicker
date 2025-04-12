@@ -43,7 +43,7 @@ const DungeonPicker = () => {
                 { withCredentials: true } // Include cookies in the request
             );
             setSubmissionStatus("success"); // Update status to success
-            setToastMessage("Dungeon selection submitted successfully!");
+            setToastMessage("Dungeon selection submitted successfully! Sit tight until voting opens.");
         } catch (error) {
             console.error("Error submitting dungeon selection:", error);
             setSubmissionStatus("error"); // Update status to error
@@ -51,7 +51,7 @@ const DungeonPicker = () => {
         }
 
         // Automatically hide the toast after 5 seconds
-        setTimeout(() => setToastMessage(null), 5000);
+        setTimeout(() => setToastMessage(null), 15000);
     };
 
     // Fetch previously selected dungeons on component load
