@@ -5,6 +5,7 @@ import { Dungeon, TWWDungeons, ExpansionName, dungeonsByExpansion, allDungeons }
 import ExpansionPanel from "./components/ExpansionPanel";
 import AvailableDungeonsPanel from "./components/AvailableDungeonsPanel";
 import SelectedDungeonsPanel from "./components/SelectedDungeonsPanel";
+import Spinner from "../../components/Spinner"; // Import the Spinner component
 
 const MAX_SELECTION = 8;
 
@@ -61,7 +62,9 @@ const DungeonPicker = () => {
                 const response = await axios.get("/api/dungeons", { withCredentials: true });
                 if (response.data?.dungeons) {
                     const dungeonIds = response.data.dungeons;
-                    const previouslySelected = allDungeons.filter((dungeon) => dungeonIds.includes(dungeon.id));
+                    const previouslySelected = dungeonIds.map((dungeonId: number) =>
+                        allDungeons.find((dungeon) => dungeon.id === dungeonId)
+                    );
                     setSelectedDungeons(previouslySelected);
                     setSubmissionStatus("success"); // Indicate that we're updating a previous choice
                 }
@@ -100,14 +103,19 @@ const DungeonPicker = () => {
                 onAddDungeon={handleAddDungeon}
                 searchTerm={searchTerm} // Pass the search term
             />
-            <SelectedDungeonsPanel
-                onSubmitSelection={submitSelection} // Use the new function here
-                selectedDungeons={selectedDungeons}
-                maxSelection={MAX_SELECTION}
-                onRemoveDungeon={handleRemoveDungeon}
-                submissionStatus={submissionStatus} // Pass submission status
-                loadingStatus={loadingPreviousEntry}
-            />
+            {loadingPreviousEntry ? (
+                <div className={styles.selectionPanel}>
+                    <Spinner />
+                </div>
+            ) : (
+                <SelectedDungeonsPanel
+                    onSubmitSelection={submitSelection} // Use the new function here
+                    selectedDungeons={selectedDungeons}
+                    maxSelection={MAX_SELECTION}
+                    onRemoveDungeon={handleRemoveDungeon}
+                    submissionStatus={submissionStatus} // Pass submission status
+                />
+            )}
         </div>
     );
 };
