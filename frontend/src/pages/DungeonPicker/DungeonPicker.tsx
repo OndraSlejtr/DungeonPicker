@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState, useEffect } from "react";
 import styles from "./DungeonPicker.module.css";
 import { Dungeon, TWWDungeons, ExpansionName, dungeonsByExpansion, allDungeons } from "../../data/dungeons";
@@ -11,6 +12,7 @@ const DungeonPicker = () => {
     const [selectedDungeons, setSelectedDungeons] = useState<Dungeon[]>([]);
     const [availableDungeons, setAvailableDungeons] = useState<Dungeon[]>(TWWDungeons);
     const [searchTerm, setSearchTerm] = useState("");
+    const [submissionStatus, setSubmissionStatus] = useState<"idle" | "success" | "error">("idle");
 
     const handleAddDungeon = (dungeon: Dungeon) => {
         if (
@@ -27,6 +29,21 @@ const DungeonPicker = () => {
 
     const handleExpansionChange = (expansion: ExpansionName) => {
         setAvailableDungeons(dungeonsByExpansion[expansion]);
+    };
+
+    const submitSelection = async () => {
+        try {
+            const dungeonIds = selectedDungeons.map((dungeon) => dungeon.id);
+            await axios.post(
+                "/api/dungeons",
+                { dungeons: dungeonIds },
+                { withCredentials: true } // Include cookies in the request
+            );
+            setSubmissionStatus("success"); // Update status to success
+        } catch (error) {
+            console.error("Error submitting dungeon selection:", error);
+            setSubmissionStatus("error"); // Update status to error
+        }
     };
 
     // Filter available dungeons based on the search term
@@ -53,10 +70,11 @@ const DungeonPicker = () => {
                 searchTerm={searchTerm} // Pass the search term
             />
             <SelectedDungeonsPanel
-                onSubmitSelection={() => alert("Selection submitted!")}
+                onSubmitSelection={submitSelection} // Use the new function here
                 selectedDungeons={selectedDungeons}
                 maxSelection={MAX_SELECTION}
                 onRemoveDungeon={handleRemoveDungeon}
+                submissionStatus={submissionStatus} // Pass submission status
             />
         </div>
     );

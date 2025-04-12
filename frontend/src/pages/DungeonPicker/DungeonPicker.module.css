@@ -177,11 +177,12 @@ h2.full {
     }
 }
 
-.submitButton {
+.submitButton,
+.successButton,
+.errorButton {
     display: block;
     width: 100%;
     padding: 10px;
-    background-color: var(--jade-green);
     color: white;
     border: none;
     border-radius: 5px;
@@ -189,12 +190,27 @@ h2.full {
     cursor: pointer;
     text-align: center;
     transition: background-color 0.3s ease;
-    animation: bounce 1.6s ease infinite; /* Apply the bounce animation */
     height: 70px;
     margin-bottom: 16px;
     font-size: 1.25rem;
 }
 
-.submitButton:hover {
-    background-color: var(--pastel-jade-green);
+.submitButton {
+    background-color: #1e407a;
+
+    animation: bounce 1.6s ease infinite; /* Apply the bounce animation */
+}
+
+.successButton {
+    background-color: var(--jade-green);
+}
+
+.errorButton {
+    background-color: #7a1e1e;
+}
+
+.submitButton:hover,
+.successButton:hover,
+.errorButton:hover {
+    opacity: 0.9;
 }

@@ -234,8 +234,6 @@ app.post("/api/dungeons", async (req: Request, res: Response) => {
         res.status(userInfo.errorCode).json({ error: userInfo.error });
     }
 
-    res.status(200).json(userInfo.data);
-
     const { dungeons } = req.body;
 
     if (!dungeons) {
@@ -255,6 +253,47 @@ app.post("/api/dungeons", async (req: Request, res: Response) => {
         }
 
         res.status(200).json({ message: "Dungeon selection submitted successfully", data });
+    } catch (err) {
+        console.error("Unexpected error:", err);
+        res.status(500).json({ error: "An unexpected error occurred" });
+    }
+});
+
+app.get("/api/dungeons", async (req: Request, res: Response) => {
+    const accessToken = req.cookies.access_token;
+
+    if (!accessToken) {
+        res.status(401).json({ error: "Unauthorized" });
+        return;
+    }
+
+    const userInfo = await getUserInfo(accessToken);
+    if (userInfo.error) {
+        res.status(userInfo.errorCode).json({ error: userInfo.error });
+        return;
+    }
+
+    try {
+        // Query the DungeonSubmissions table for the newest submission by the user
+        const { data, error } = await supabase
+            .from("DungeonSubmissions")
+            .select("*")
+            .eq("author_discord_id", userInfo.data?.id) // Filter by the user's Discord ID
+            .order("created_at", { ascending: false }) // Order by newest first
+            .limit(1); // Get only the newest submission
+
+        if (error) {
+            console.error("Error fetching dungeon submissions:", error);
+            res.status(500).json({ error: "Failed to fetch dungeon submissions" });
+            return;
+        }
+
+        if (!data || data.length === 0) {
+            res.status(404).json({ error: "No dungeon submissions found for this user" });
+            return;
+        }
+
+        res.status(200).json({ dungeons: data[0].dungeons });
     } catch (err) {
         console.error("Unexpected error:", err);
         res.status(500).json({ error: "An unexpected error occurred" });
