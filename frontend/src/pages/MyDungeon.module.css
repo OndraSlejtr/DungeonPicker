@@ -51,7 +51,7 @@
 }
 
 .switchButton.active {
-    flex-grow: 2.2; /* Increase flex-grow for the active button */
+    flex-grow: 1.8; /* Increase flex-grow for the active button */
 }
 
 .switchButton.active.best {

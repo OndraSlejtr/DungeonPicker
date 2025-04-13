@@ -7,7 +7,8 @@
     text-transform: uppercase; /* Make the text uppercase */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
     white-space: nowrap; /* Prevent text wrapping */
-    display: inline-block; /* Ensure it behaves like a block element */
-    float: right;
+    display: inline;
+    width: 50px;
+    margin-left: 10px;
     background-color: white;
 }
