@@ -11,6 +11,7 @@ import Explanation from "./pages/Explanation.tsx";
 import App from "./App.tsx";
 import Voting from "./pages/Voting.tsx";
 import DungeonPicker from "./pages/DungeonPicker/DungeonPicker.tsx";
+import MyDungeons from "./pages/MyDungeons.tsx";
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
@@ -40,7 +41,7 @@ createRoot(document.getElementById("root")!).render(
                                 path="/pick"
                                 element={
                                     <AuthGuard>
-                                        <DungeonPicker />
+                                        <MyDungeons />
                                     </AuthGuard>
                                 }
                             />

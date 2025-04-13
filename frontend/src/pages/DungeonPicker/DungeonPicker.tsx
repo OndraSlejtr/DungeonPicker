@@ -9,7 +9,9 @@ import Spinner from "../../components/Spinner"; // Import the Spinner component
 
 const MAX_SELECTION = 8;
 
-const DungeonPicker = () => {
+type ListType = "best" | "worst";
+
+const DungeonPicker = (props: { listType: ListType }) => {
     const [selectedDungeons, setSelectedDungeons] = useState<Dungeon[]>([]);
     const [availableDungeons, setAvailableDungeons] = useState<Dungeon[]>(TWWDungeons);
     const [searchTerm, setSearchTerm] = useState("");
@@ -38,7 +40,7 @@ const DungeonPicker = () => {
         try {
             const dungeonIds = selectedDungeons.map((dungeon) => dungeon.id);
             await axios.post(
-                "/api/dungeons",
+                `/api/dungeons/${props.listType}`,
                 { dungeons: dungeonIds },
                 { withCredentials: true } // Include cookies in the request
             );
@@ -59,7 +61,7 @@ const DungeonPicker = () => {
         const fetchSelectedDungeons = async () => {
             setLoadingPreviousEntry(true); // Set loading state to true
             try {
-                const response = await axios.get("/api/dungeons", { withCredentials: true });
+                const response = await axios.get(`/api/dungeons/${props.listType}`, { withCredentials: true });
                 if (response.data?.dungeons) {
                     const dungeonIds = response.data.dungeons;
                     const previouslySelected = dungeonIds.map((dungeonId: number) =>
@@ -70,12 +72,14 @@ const DungeonPicker = () => {
                 }
             } catch (error) {
                 console.error("Error fetching previously selected dungeons:", error);
+                setSelectedDungeons([]); // Reset selected dungeons on error
+                setSubmissionStatus("idle");
             }
             setLoadingPreviousEntry(false); // Reset loading state
         };
 
         fetchSelectedDungeons();
-    }, []);
+    }, [props.listType]);
 
     // Filter available dungeons based on the search term
     useEffect(() => {

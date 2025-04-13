@@ -231,7 +231,7 @@ app.post("/api/auth/logout", (req: Request, res: Response) => {
     res.status(200).json({ message: "Logged out successfully" });
 });
 
-app.post("/api/dungeons", async (req: Request, res: Response) => {
+app.post("/api/dungeons/:type", async (req: Request, res: Response) => {
     const accessToken = req.cookies.access_token;
 
     if (!accessToken) {
@@ -245,16 +245,17 @@ app.post("/api/dungeons", async (req: Request, res: Response) => {
     }
 
     const { dungeons } = req.body;
+    const { type } = req.params;
 
-    if (!dungeons) {
-        res.status(400).json({ error: " dungeons are required" });
+    if (!dungeons || !type || (type !== "best" && type !== "worst")) {
+        res.status(400).json({ error: "Dungeons and dungeon list type are required" });
         return;
     }
 
     try {
         const { data, error } = await supabase
             .from("DungeonSubmissions")
-            .insert([{ author_discord_id: userInfo.data?.username, dungeons }]);
+            .insert([{ author_discord_id: userInfo.data?.username, dungeons, listType: type }]);
 
         if (error) {
             console.error("Error inserting data:", error);
@@ -269,7 +270,7 @@ app.post("/api/dungeons", async (req: Request, res: Response) => {
     }
 });
 
-app.get("/api/dungeons", async (req: Request, res: Response) => {
+app.get("/api/dungeons/:type", async (req: Request, res: Response) => {
     const accessToken = req.cookies.access_token;
 
     if (!accessToken) {
@@ -283,12 +284,19 @@ app.get("/api/dungeons", async (req: Request, res: Response) => {
         return;
     }
 
+    const { type } = req.params;
+    if (!type || (type !== "best" && type !== "worst")) {
+        res.status(400).json({ error: "Dungeons and dungeon list type are required" });
+        return;
+    }
+
     try {
         // Query the DungeonSubmissions table for the newest submission by the user
         const { data, error } = await supabase
             .from("DungeonSubmissions")
             .select("*")
             .eq("author_discord_id", userInfo.data?.username) // Filter by the user's Discord ID
+            .eq("listType", type) // Filter by the list type (best or worst)
             .order("created_at", { ascending: false }) // Order by newest first
             .limit(1); // Get only the newest submission
 
