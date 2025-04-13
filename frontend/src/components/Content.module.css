@@ -5,6 +5,8 @@
     flex-direction: row;
     justify-content: center;
     height: auto;
-    min-height: calc(100vh - 84px); /* Ensure it takes at least full viewport height */
+    min-height: calc(100vh - 65px); /* Ensure it takes at least full viewport height */
     box-sizing: border-box;
+
+    /* background-color: var(--muted-dark-gray); */
 }
