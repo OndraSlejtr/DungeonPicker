@@ -1,7 +1,7 @@
 .chip {
     color: var(--jade-green); /* White text for contrast */
     padding: 5px 15px; /* Add some padding for better appearance */
-    border-radius: 20px; /* Rounded corners for a chip-like appearance */
+    border-radius: 10px; /* Rounded corners for a chip-like appearance */
     font-size: 0.9rem; /* Adjust font size */
     font-weight: bold; /* Make the text bold */
     text-transform: uppercase; /* Make the text uppercase */
