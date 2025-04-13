@@ -1,0 +1,101 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 10px;
+
+    max-width: 980px;
+}
+
+.switchContainer {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.switchButton {
+    flex: 1;
+    padding: 10px 20px;
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-align: center;
+    background-color: transparent;
+    color: var(--soft-gold);
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, flex-grow 0.3s ease; /* Add flex-grow transition */
+}
+
+.switchButton.best {
+    border-radius: 8px 0 0 8px;
+    border: 2px solid var(--soft-gold);
+    border-right: 0;
+}
+
+.switchButton.worst {
+    border-radius: 0 8px 8px 0;
+    color: var(--light-purple);
+    border: 2px solid var(--light-purple);
+    border-left: 0;
+}
+
+.switchButton.best:hover {
+    background-color: var(--soft-gold);
+    color: white;
+}
+
+.switchButton.worst:hover {
+    background-color: var(--soft-purple);
+    color: white;
+}
+
+.switchButton.active {
+    flex-grow: 2.2; /* Increase flex-grow for the active button */
+}
+
+.switchButton.active.best {
+    background-color: var(--soft-gold);
+    color: white;
+}
+
+.switchButton.active.worst {
+    background-color: var(--soft-purple);
+    border-color: var(--soft-purple);
+    color: white;
+}
+
+.toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--jade-green);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 1rem;
+    z-index: 1000;
+    animation: fadeInOut 5s ease-in-out;
+}
+
+/* Fade-in and fade-out animation */
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-10px);
+    }
+    10% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+    90% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-10px);
+    }
+}

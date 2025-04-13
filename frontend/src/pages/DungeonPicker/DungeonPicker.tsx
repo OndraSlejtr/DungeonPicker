@@ -11,13 +11,19 @@ const MAX_SELECTION = 8;
 
 type ListType = "best" | "worst";
 
-const DungeonPicker = (props: { listType: ListType }) => {
+const DungeonPicker = (props: {
+    listType: ListType;
+    setToastMessage: (msg: string | null) => void;
+    onSubmit: () => void;
+    setCompletedStatus: (complete: boolean) => void; // Add this prop to set the completed status
+}) => {
     const [selectedDungeons, setSelectedDungeons] = useState<Dungeon[]>([]);
     const [availableDungeons, setAvailableDungeons] = useState<Dungeon[]>(TWWDungeons);
     const [searchTerm, setSearchTerm] = useState("");
     const [submissionStatus, setSubmissionStatus] = useState<"idle" | "success" | "error">("idle");
-    const [toastMessage, setToastMessage] = useState<string | null>(null);
     const [loadingPreviousEntry, setLoadingPreviousEntry] = useState<boolean>(false);
+
+    const { setToastMessage, onSubmit, setCompletedStatus } = props; // Destructure setToastMessage from props
 
     const handleAddDungeon = (dungeon: Dungeon) => {
         if (
@@ -45,7 +51,11 @@ const DungeonPicker = (props: { listType: ListType }) => {
                 { withCredentials: true } // Include cookies in the request
             );
             setSubmissionStatus("success"); // Update status to success
-            setToastMessage("Dungeon selection submitted successfully! Sit tight until voting opens.");
+            setToastMessage(
+                `${props.listType.toUpperCase()} dungeon selection submitted successfully! Sit tight until voting opens.`
+            );
+            onSubmit();
+            setCompletedStatus(true); // Set completed status to true
         } catch (error) {
             console.error("Error submitting dungeon selection:", error);
             setSubmissionStatus("error"); // Update status to error
@@ -69,6 +79,7 @@ const DungeonPicker = (props: { listType: ListType }) => {
                     );
                     setSelectedDungeons(previouslySelected);
                     setSubmissionStatus("success"); // Indicate that we're updating a previous choice
+                    setCompletedStatus(true); // Set completed status to true
                 }
             } catch (error) {
                 console.error("Error fetching previously selected dungeons:", error);
@@ -79,7 +90,7 @@ const DungeonPicker = (props: { listType: ListType }) => {
         };
 
         fetchSelectedDungeons();
-    }, [props.listType]);
+    }, [props.listType, setCompletedStatus]);
 
     // Filter available dungeons based on the search term
     useEffect(() => {
@@ -93,9 +104,6 @@ const DungeonPicker = (props: { listType: ListType }) => {
 
     return (
         <div className={styles.container}>
-            {/* Toast Notification */}
-            {toastMessage && <div className={styles.toast}>{toastMessage}</div>}
-
             <ExpansionPanel
                 onExpansionChange={handleExpansionChange}
                 onSearchChange={setSearchTerm} // Pass handler to update search term

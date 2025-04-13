@@ -160,13 +160,13 @@ import WordCloud from "../components/WordCloud";
 // };
 
 const Explanation = () => {
-    const words = [
-        { text: "Halls of <XYZ>", top: 10, left: 20, fontSize: 1.5, opacity: 0.3 },
-        { text: "Make everyone suffer 😈", top: 20, left: 60, fontSize: 1.2, opacity: 0.8 },
-        { text: "Easy weeklies 😴", top: 65, left: 15, fontSize: 0.8, opacity: 0.6 },
-        { text: "Best trinkets possible", top: 75, left: 65, fontSize: 1.8, opacity: 0.175 },
-        { text: "Classic only", top: 50, left: 40, fontSize: 2, opacity: 0.8 },
-    ];
+    // const words = [
+    //     { text: "Halls of <XYZ>", top: 10, left: 20, fontSize: 1.5, opacity: 0.3 },
+    //     { text: "Make everyone suffer 😈", top: 20, left: 60, fontSize: 1.2, opacity: 0.8 },
+    //     { text: "Easy weeklies 😴", top: 65, left: 15, fontSize: 0.8, opacity: 0.6 },
+    //     { text: "Best trinkets possible", top: 75, left: 65, fontSize: 1.8, opacity: 0.175 },
+    //     { text: "Classic only", top: 50, left: 40, fontSize: 2, opacity: 0.8 },
+    // ];
 
     // const lines = Object.entries(dungeons).flatMap(([expansion, dungeons]) => {
     //     return {

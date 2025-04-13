@@ -1,0 +1,13 @@
+.chip {
+    color: var(--jade-green); /* White text for contrast */
+    padding: 5px 15px; /* Add some padding for better appearance */
+    border-radius: 20px; /* Rounded corners for a chip-like appearance */
+    font-size: 0.9rem; /* Adjust font size */
+    font-weight: bold; /* Make the text bold */
+    text-transform: uppercase; /* Make the text uppercase */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+    white-space: nowrap; /* Prevent text wrapping */
+    display: inline-block; /* Ensure it behaves like a block element */
+    float: right;
+    background-color: white;
+}

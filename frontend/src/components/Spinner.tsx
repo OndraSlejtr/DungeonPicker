@@ -11,6 +11,9 @@ const styles = {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        animation: "fadeIn 1s ease-in-out", // Add fade-in animation
+        opacity: 0, // Start with hidden opacity
+        animationFillMode: "forwards", // Ensure opacity stays at 1 after animation
     },
     spinner: {
         width: "40px",
@@ -22,13 +25,22 @@ const styles = {
     },
 };
 
-// Add keyframes for the spin animation
+// Add keyframes for the spin and fade-in animations
 const styleSheet = document.styleSheets[0];
 styleSheet.insertRule(
     `
     @keyframes spin {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
+    }
+`,
+    styleSheet.cssRules.length
+);
+styleSheet.insertRule(
+    `
+    @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
     }
 `,
     styleSheet.cssRules.length

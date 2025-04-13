@@ -53,7 +53,7 @@ const Header = () => {
             </div>
             <nav className={styles.nav}>
                 <NavLink to={"/pick"} className={styles.link}>
-                    Pick Best
+                    Pick
                 </NavLink>
                 <NavLink to={"/vote"} className={styles.link}>
                     Voting starts in {countdown}
