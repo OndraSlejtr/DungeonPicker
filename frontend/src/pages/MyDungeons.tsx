@@ -10,6 +10,7 @@ const MyDungeons = () => {
     const [worstCompletedStatus, setWorstCompletedStatus] = useState<boolean>(false); // Track if the user has completed their selection
 
     const swap = () => {
+        if (bestCompletedStatus && worstCompletedStatus) return;
         setCurrentPicker((prev) => (prev === "best" ? "worst" : "best")); // Toggle between best and worst
     };
 
