@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
-import WordCloud from "../components/WordCloud";
 
 // const dungeons = {
 //     Classic: [
