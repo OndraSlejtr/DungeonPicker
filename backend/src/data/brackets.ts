@@ -88,3 +88,5 @@ export const bestDungeonsPicksBracket = [
         id: 22,
     },
 ];
+
+export const worstDungeonsPicksBracket = [];

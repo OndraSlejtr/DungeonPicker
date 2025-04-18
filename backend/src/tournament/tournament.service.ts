@@ -136,7 +136,7 @@ const generateMatchupsForRound = (
  * @param votes - The history of votes cast so far.
  * @returns Information about the next match or null if the tournament is finished.
  */
-export const getNextMatch = (allPicks: DungeonPick[], votes: Vote[]): NextMatchInfo | null => {
+export const generateNextMatch = (allPicks: DungeonPick[], votes: Vote[]): NextMatchInfo | null => {
     let round = 0;
     const maxPossibleRounds = Math.ceil(Math.log2(allPicks.length)); // Estimate max rounds
 

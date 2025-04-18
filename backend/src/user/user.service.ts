@@ -25,8 +25,8 @@ export type DiscordUser = {
 };
 
 type Result<T> =
-    | { data: T; error?: null } // Success case: data is present, error is null
-    | { data?: null | undefined; error: string; errorCode: number }; // Error case: error is present, data is null
+    | { data: T; error?: undefined } // Success case: data is present, error is null
+    | { data?: undefined; error: string; errorCode: number }; // Error case: error is present, data is null
 
 const cache = new Map<string, { data: DiscordUser; expiry: number }>();
 

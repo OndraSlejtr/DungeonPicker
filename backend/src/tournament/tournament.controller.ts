@@ -1,10 +1,120 @@
-const getNextMatch = (req, res) => {
-    res.status(200).json([]);
-    return;
+import { Request, Response } from "express";
+import { getUserInfo } from "../user/user.service";
+import { logAxiosError } from "../logging/AxiosErrorLogger";
+import { generateNextMatch } from "./tournament.service";
+import { bestDungeonsPicksBracket, worstDungeonsPicksBracket } from "../data/brackets";
+import { supabase } from "../database/supabaseClient";
+
+const _getNextMatch = async (listType: string, discordUsername: String) => {
+    const currentVotes = await supabase
+        .from("Votes")
+        .select("*")
+        .eq("voter_discord_id", discordUsername)
+        .eq("list_type", listType);
+
+    const nextMatch = generateNextMatch(
+        listType === "best" ? bestDungeonsPicksBracket : worstDungeonsPicksBracket,
+        currentVotes.data || []
+    );
+    return nextMatch;
 };
 
-const postVote = (req, res) => {
-    const { round, match, winnerId, loserId } = req.body;
+const getNextMatch = async (req: Request, res: Response) => {
+    const accessToken = req.cookies.access_token;
+    if (!accessToken) {
+        res.status(401).json({ error: "Unauthorized" });
+        return;
+    }
+
+    const { listType } = req.params;
+    if (listType !== "best" && listType !== "worst") {
+        res.status(400).json({ error: "Invalid list type" });
+    }
+
+    try {
+        const userInfo = await getUserInfo(accessToken);
+        if (userInfo.error) {
+            res.status(userInfo.errorCode).json({ error: userInfo.error });
+        } else {
+            const nextMatch = await _getNextMatch(listType, userInfo.data!.username);
+
+            if (!nextMatch) {
+                res.status(200).json({ message: "No more matches available" });
+                return;
+            }
+
+            res.status(200).json({ message: "Next match ready", match: nextMatch });
+            return;
+        }
+    } catch (err) {
+        logAxiosError(err, "Error getting next match");
+        res.status(500).json({ error: "Error getting next match" });
+        return;
+    }
+};
+
+const postVote = async (req: Request, res: Response) => {
+    const accessToken = req.cookies.access_token;
+    if (!accessToken) {
+        res.status(401).json({ error: "Unauthorized" });
+        return;
+    }
+
+    const { listType } = req.params;
+    const { round, match, winnerId, loserId, winner } = req.body;
+    if (!round || !match || !winnerId || !loserId || winner || (listType !== "best" && listType !== "worst")) {
+        res.status(400).json({ error: "Invalid inputs type" });
+    }
+
+    try {
+        const userInfo = await getUserInfo(accessToken);
+        if (userInfo.error) {
+            res.status(userInfo.errorCode).json({ error: userInfo.error });
+        } else {
+            const nextMatch = await _getNextMatch(listType, userInfo.data!.username);
+
+            if (!nextMatch) {
+                res.status(400).json({ message: "No more matches available" });
+                return;
+            }
+
+            if (
+                nextMatch.round !== round ||
+                nextMatch.match !== match ||
+                (nextMatch.submissionAId !== winnerId && nextMatch.submissionAId !== loserId) ||
+                (nextMatch.submissionBId !== winnerId && nextMatch.submissionBId !== loserId)
+            ) {
+                res.status(400).json({ message: "You are voting on wrong match" });
+            }
+
+            const trueWinner = winner === 0 ? nextMatch.submissionAId : nextMatch.submissionBId;
+            const trueLoser = winner === 0 ? nextMatch.submissionBId : nextMatch.submissionAId;
+
+            const { error } = await supabase.from("Votes").insert([
+                {
+                    voter_discord_id: userInfo.data?.username,
+                    list_type: listType,
+                    round,
+                    match,
+                    winning_submission_id: trueWinner,
+                    losing_submission_id: trueLoser,
+                },
+            ]);
+
+            if (error) {
+                console.error("Error inserting data:", error);
+                res.status(500).json({ error: "Error recording vote" });
+                return;
+            }
+
+            res.status(201).json(nextMatch);
+            return;
+        }
+    } catch (err) {
+        logAxiosError(err, "Error getting next match");
+        res.status(500).json({ error: "Error getting next match" });
+        return;
+    }
 };
 
 export { getNextMatch, postVote };
