@@ -27,7 +27,7 @@
     stroke-dasharray: 48; /* Approximate length of the checkmark path */
     stroke-dashoffset: 48;
     /* Checkmark fill is none (transparent) by default from SVG path attribute */
-    animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+    animation: stroke 0.2s cubic-bezier(0.65, 0, 0.45, 1) 0.5s forwards;
 }
 
 @keyframes stroke {

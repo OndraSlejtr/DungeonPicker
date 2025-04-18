@@ -1,55 +1,143 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import VotingPanel from "./components/VotingPanel";
 import styles from "./DungeonVoter.module.css";
 import { Dungeon, getDungeonsByIds } from "../../data/dungeons";
 import Confirmed from "../../components/Confirmed";
+import axios, { AxiosResponse } from "axios";
+import Spinner from "../../components/Spinner";
 
-type VotingState = "idle" | "voted" | "loadingNext" | "finished";
+type VotingState = "idle" | "voted" | "loadingNext" | "finished" | "error";
 
-const DungeonVoter: React.FC = () => {
+type ListType = "best" | "worst";
+
+interface DungeonPick {
+    dungeons: number[];
+    id: number;
+}
+
+export interface NextMatchInfo {
+    round: number;
+    match: number;
+    submissionA: DungeonPick;
+    submissionB: DungeonPick;
+}
+
+const DungeonVoter = (props: { listType: ListType; setCompletedStatus: (status: boolean) => void }) => {
     const [currentRoundIndex, setCurrentRoundIndex] = useState<number>(0);
     const [currentMatchIndex, setCurrentMatchIndex] = useState<number>(0);
-    const [maxMatchIndex, setMaxMatchIndex] = useState<number>(7);
     const [votingState, setVotingState] = useState<VotingState>("idle");
+
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const [dungeonsA, setDungeonsA] = useState<Dungeon[]>([]);
     const [dungeonsB, setDungeonsB] = useState<Dungeon[]>([]);
+    const [dungeonsAId, setDungeonsAId] = useState<number>(0);
+    const [dungeonsBId, setDungeonsBId] = useState<number>(0);
 
     const [winningList, setWinningList] = useState<"A" | "B" | null>(null);
 
-    useEffect(() => {
-        setCurrentRoundIndex(0);
-        setCurrentMatchIndex(0);
-        setVotingState("idle");
-        setDungeonsA(getDungeonsByIds([1, 2, 3, 4, 5, 6, 7, 8]));
-        setDungeonsB(getDungeonsByIds([29, 30, 31, 32, 33, 34, 35, 36]));
-    }, []);
+    const { listType, setCompletedStatus } = props;
 
-    const advanceToNext = useCallback(() => {
+    const roundNames = ["Round of 32", "Round of 16", "Quarterfinals", "Semifinals", "Grandfinals"];
+
+    const handleNextRoundInfo = useCallback(
+        (response: AxiosResponse) => {
+            if (response.status === 200 || response.status === 201) {
+                console.log(response.data);
+
+                const { match: matchData, message } = response.data;
+
+                if (message === "No more matches available") {
+                    setVotingState("finished");
+                    setCompletedStatus(true);
+                    console.log("finished voting");
+                    return;
+                }
+
+                console.log("New match up ahead");
+
+                const { match, round, submissionA, submissionB }: NextMatchInfo = matchData;
+
+                setCurrentMatchIndex(match);
+                setCurrentRoundIndex(round);
+
+                setDungeonsA(getDungeonsByIds(submissionA.dungeons));
+                setDungeonsB(getDungeonsByIds(submissionB.dungeons));
+                setDungeonsAId(submissionA.id);
+                setDungeonsBId(submissionB.id);
+            } else {
+                setVotingState("error");
+                console.error("Error fetching next round:", response.data);
+            }
+        },
+        [setCompletedStatus]
+    );
+
+    const advanceToNext = (response: AxiosResponse) => {
         setVotingState("loadingNext");
+        handleNextRoundInfo(response);
 
         setTimeout(() => {
-            setCurrentMatchIndex((prev) => (prev + 1) % (maxMatchIndex + 1));
-            setCurrentRoundIndex((prev) => {
-                const nextMatchIndex = (currentMatchIndex + 1) % (maxMatchIndex + 1);
-                return nextMatchIndex === 0 ? prev + 1 : prev;
-            });
             setWinningList(null);
             setVotingState("idle");
         }, 450);
-    }, [currentRoundIndex, currentMatchIndex, maxMatchIndex]);
+    };
 
-    const handleVote = (selectedList: Dungeon[], side: "A" | "B") => {
+    const handleVote = (_selectedList: Dungeon[], side: "A" | "B") => {
         if (votingState !== "idle") return;
 
-        setVotingState("voted");
-        setWinningList(side);
+        const sendVote = async () => {
+            const response = await axios.post(
+                `/api/tournament/vote/${listType}`,
+                {
+                    round: currentRoundIndex,
+                    match: currentMatchIndex,
+                    winner: side,
+                    winnerId: dungeonsAId,
+                    loserId: dungeonsBId,
+                },
+                { withCredentials: true }
+            );
 
-        setTimeout(() => {
-            advanceToNext();
-        }, 2500);
+            if (response.status !== 201) {
+                console.error("Error sending vote:", response.data);
+                setVotingState("error");
+                return;
+            }
+
+            setVotingState("voted");
+            setWinningList(side);
+
+            setTimeout(() => {
+                advanceToNext(response);
+            }, 1500);
+        };
+        sendVote();
     };
+
+    useEffect(() => {
+        const fetchNextRound = async () => {
+            const response = await axios.get(`/api/tournament/next-match/${listType}`, { withCredentials: true });
+            setIsLoading(false);
+            handleNextRoundInfo(response);
+        };
+
+        fetchNextRound();
+    }, [listType, handleNextRoundInfo]);
+
+    // const targetDate = new Date("2025-04-18T16:00:00");
+
+    // const now = new Date();
+    // const difference = targetDate.getTime() - now.getTime();
+
+    // if (difference > 0) {
+    //     return <VotingClosed />;
+    // }
+
+    if (isLoading) {
+        return <Spinner />;
+    }
 
     let animationClass = "";
 
@@ -62,8 +150,15 @@ const DungeonVoter: React.FC = () => {
     return (
         <div className={styles.container}>
             <div className={styles.roundInfo}>
-                Round {currentRoundIndex + 1} - Match {currentMatchIndex + 1} / {maxMatchIndex + 1}
+                <h1>{listType === "best" ? "😲 Pick BEST dungeons" : "💀 Pick WORST dungeons "}</h1>
+                {votingState !== "finished" && (
+                    <p>
+                        {roundNames[currentRoundIndex]} - match {currentMatchIndex + 1}
+                    </p>
+                )}
             </div>
+
+            {votingState}
 
             <div
                 key={`${currentRoundIndex}-${currentMatchIndex}`}
@@ -104,6 +199,17 @@ const DungeonVoter: React.FC = () => {
                         />
                     </div>
                 )}
+
+                {votingState === "finished" && (
+                    <div className={styles.finishedContainer}>
+                        <h1 className={styles.finishedText}>This part of the tournament has finished!</h1>
+                        <p className={styles.finishedText}>
+                            Make sure you vote on other half above! The results will be announced soon.
+                        </p>
+                    </div>
+                )}
+
+                {votingState === "error" && <h1>Error occured, try reloading or ask Cynique WTF is up</h1>}
             </div>
         </div>
     );

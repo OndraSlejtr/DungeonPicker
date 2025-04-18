@@ -46,7 +46,7 @@
 
 /* Animation classes applied based on votingState */
 .contentFadeOut {
-    animation: fadeOut 2.5s ease-in forwards;
+    animation: fadeOut 1.5s ease-in forwards;
 }
 
 .contentSlideIn {
@@ -108,7 +108,21 @@
 .roundInfo {
     font-size: 1.5rem;
     color: var(--text-light-gold);
-    margin-bottom: 15px;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.roundInfo h1 {
+    margin: 0; /* Remove default margin */
+    font-size: 3rem; /* Adjust font size for round number */
+}
+
+.roundInfo p {
+    margin-left: 30px;
+    color: #ccc;
 }
 
 .loadingNext {
@@ -152,4 +166,11 @@
     list-style: none;
     padding: 0;
     margin: 0;
+}
+
+.finishedContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
 }

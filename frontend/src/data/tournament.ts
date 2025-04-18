@@ -1,4 +1,4 @@
-import { Dungeon, allDungeons } from "./dungeons";
+import { allDungeons } from "./dungeons";
 
 // Represents a single list submission (array of dungeon IDs)
 export type DungeonList = number[];
@@ -43,7 +43,7 @@ export const generateMockTournamentBracket = (numberOfLists: number = 16): Tourn
 
     while (currentLists.length > 1) {
         const round: TournamentRound = { roundIndex, matches: [] };
-        const nextRoundLists: (DungeonList | null)[] = [];
+        // const nextRoundLists: (DungeonList | null)[] = [];
 
         for (let i = 0; i < currentLists.length; i += 2) {
             const match: TournamentMatch = {

@@ -30,7 +30,6 @@ const VotingPanel: React.FC<VotingPanelProps> = ({ dungeonList, onClick, disable
     return (
         <div className={panelClasses} onClick={!disabled ? onClick : undefined}>
             <DungeonsList dungeons={dungeonList} renderItem={renderDungeonItem} />
-            {!disabled && <div className={styles.clickIndicator}>Click to Vote</div>}
         </div>
     );
 };

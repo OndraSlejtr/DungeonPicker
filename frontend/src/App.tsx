@@ -6,7 +6,7 @@ import AuthGuard from "./auth/AuthGuard";
 import Content from "./components/Content";
 import Explanation from "./pages/Explanation";
 import MyDungeons from "./pages/MyDungeons";
-import DungeonVoter from "./pages/DungeonVoter/DungeonVoter";
+import MyVotes from "./pages/MyVotes";
 
 const App = () => {
     return (
@@ -26,7 +26,7 @@ const App = () => {
                         path="/vote"
                         element={
                             <AuthGuard>
-                                <DungeonVoter />
+                                <MyVotes />
                             </AuthGuard>
                         }
                     />

@@ -1,4 +1,4 @@
-const Voting = () => {
+const VotingClosed = () => {
     return (
         <>
             <h1>Voting isn't open yet.</h1>
@@ -6,4 +6,4 @@ const Voting = () => {
     );
 };
 
-export default Voting;
+export default VotingClosed;

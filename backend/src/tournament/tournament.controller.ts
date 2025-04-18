@@ -7,10 +7,12 @@ import { supabase } from "../database/supabaseClient";
 
 const _getNextMatch = async (listType: string, discordUsername: String) => {
     const currentVotes = await supabase
-        .from("Votes")
+        .from("DungeonVotes")
         .select("*")
         .eq("voter_discord_id", discordUsername)
-        .eq("list_type", listType);
+        .eq("listType", listType);
+
+    console.log("Current votes:", currentVotes.data);
 
     const nextMatch = generateNextMatch(
         listType === "best" ? bestDungeonsPicksBracket : worstDungeonsPicksBracket,
@@ -60,44 +62,56 @@ const postVote = async (req: Request, res: Response) => {
         return;
     }
 
+    console.log("xd", req.body);
+
     const { listType } = req.params;
     const { round, match, winnerId, loserId, winner } = req.body;
-    if (!round || !match || !winnerId || !loserId || winner || (listType !== "best" && listType !== "worst")) {
+    if (
+        round === undefined ||
+        match === undefined ||
+        winnerId === undefined ||
+        loserId === undefined ||
+        winner === undefined ||
+        (listType !== "best" && listType !== "worst")
+    ) {
         res.status(400).json({ error: "Invalid inputs type" });
+        return;
     }
 
     try {
         const userInfo = await getUserInfo(accessToken);
         if (userInfo.error) {
             res.status(userInfo.errorCode).json({ error: userInfo.error });
+            return;
         } else {
-            const nextMatch = await _getNextMatch(listType, userInfo.data!.username);
+            const currentMatch = await _getNextMatch(listType, userInfo.data!.username);
 
-            if (!nextMatch) {
-                res.status(400).json({ message: "No more matches available" });
+            if (!currentMatch) {
+                res.status(200).json({ message: "No more matches available" });
                 return;
             }
 
             if (
-                nextMatch.round !== round ||
-                nextMatch.match !== match ||
-                (nextMatch.submissionAId !== winnerId && nextMatch.submissionAId !== loserId) ||
-                (nextMatch.submissionBId !== winnerId && nextMatch.submissionBId !== loserId)
+                currentMatch.round !== round ||
+                currentMatch.match !== match ||
+                (currentMatch.submissionA.id !== winnerId && currentMatch.submissionA.id !== loserId) ||
+                (currentMatch.submissionB.id !== winnerId && currentMatch.submissionB.id !== loserId)
             ) {
                 res.status(400).json({ message: "You are voting on wrong match" });
+                return;
             }
 
-            const trueWinner = winner === 0 ? nextMatch.submissionAId : nextMatch.submissionBId;
-            const trueLoser = winner === 0 ? nextMatch.submissionBId : nextMatch.submissionAId;
+            const trueWinner = winner === "A" ? currentMatch.submissionA.id : currentMatch.submissionB.id;
+            const trueLoser = winner === "A" ? currentMatch.submissionB.id : currentMatch.submissionA.id;
 
-            const { error } = await supabase.from("Votes").insert([
+            const { error } = await supabase.from("DungeonVotes").insert([
                 {
                     voter_discord_id: userInfo.data?.username,
-                    list_type: listType,
+                    listType: listType,
                     round,
                     match,
-                    winning_submission_id: trueWinner,
-                    losing_submission_id: trueLoser,
+                    winningSubmission: trueWinner,
+                    losingSubmission: trueLoser,
                 },
             ]);
 
@@ -107,7 +121,14 @@ const postVote = async (req: Request, res: Response) => {
                 return;
             }
 
-            res.status(201).json(nextMatch);
+            const nextMatch = await _getNextMatch(listType, userInfo.data!.username);
+
+            if (!nextMatch) {
+                res.status(201).json({ message: "No more matches available" });
+                return;
+            }
+
+            res.status(201).json({ message: "Next match ready", match: nextMatch });
             return;
         }
     } catch (err) {

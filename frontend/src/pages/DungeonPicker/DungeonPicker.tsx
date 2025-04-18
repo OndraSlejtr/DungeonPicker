@@ -6,6 +6,7 @@ import ExpansionPanel from "./components/ExpansionPanel";
 import AvailableDungeonsPanel from "./components/AvailableDungeonsPanel";
 import SelectedDungeonsPanel from "./components/SelectedDungeonsPanel";
 import Spinner from "../../components/Spinner"; // Import the Spinner component
+import PickingClosed from "./PickingClosed";
 
 const MAX_SELECTION = 8;
 
@@ -101,6 +102,15 @@ const DungeonPicker = (props: {
             setAvailableDungeons(() => allDungeons.filter((dungeon) => regex.test(dungeon.name)));
         }
     }, [searchTerm]);
+
+    const targetDate = new Date("2025-04-18T16:00:00");
+
+    const now = new Date();
+    const difference = targetDate.getTime() - now.getTime();
+
+    if (difference <= 0) {
+        return <PickingClosed />;
+    }
 
     return (
         <div className={styles.container}>

@@ -21,7 +21,7 @@ const Header = () => {
     };
 
     useEffect(() => {
-        const targetDate = new Date("2025-04-18T16:00:00"); // Midnight of April 18, 2025
+        const targetDate = new Date("2025-04-18T16:00:00");
 
         const updateCountdown = () => {
             const now = new Date();
@@ -37,7 +37,7 @@ const Header = () => {
             const minutes = Math.floor((difference / (1000 * 60)) % 60);
             const seconds = Math.floor((difference / 1000) % 60);
 
-            setCountdown(`${days}d ${hours}h ${minutes}m ${seconds}s`);
+            setCountdown(`Voting starts in ${days}d ${hours}h ${minutes}m ${seconds}s`);
         };
 
         updateCountdown(); // Initialize countdown immediately
@@ -56,7 +56,7 @@ const Header = () => {
                     Pick
                 </NavLink>
                 <NavLink to={"/vote"} className={styles.link}>
-                    Voting starts in {countdown}
+                    {countdown}
                 </NavLink>
             </nav>
             <div className={styles.userSection}>

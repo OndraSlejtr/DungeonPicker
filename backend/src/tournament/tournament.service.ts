@@ -8,8 +8,8 @@ export interface DungeonPick {
 export interface Vote {
     round: number;
     match: number; // Index of the match within its round
-    winningSubmissionId: number;
-    losingSubmissionId: number;
+    winningSubmission: number;
+    losingSubmission: number;
 }
 
 export interface Matchup {
@@ -22,8 +22,8 @@ export interface Matchup {
 export interface NextMatchInfo {
     round: number;
     match: number;
-    submissionAId: number;
-    submissionBId: number;
+    submissionA: DungeonPick;
+    submissionB: DungeonPick;
 }
 
 // Helper to find a pick by ID
@@ -44,8 +44,8 @@ const findVoteForMatch = (
     return votes.find(
         (v) =>
             v.round === round &&
-            ((v.winningSubmissionId === submissionAId && v.losingSubmissionId === submissionBId) ||
-                (v.winningSubmissionId === submissionBId && v.losingSubmissionId === submissionAId))
+            ((v.winningSubmission === submissionAId && v.losingSubmission === submissionBId) ||
+                (v.winningSubmission === submissionBId && v.losingSubmission === submissionAId))
     );
 };
 
@@ -78,7 +78,7 @@ const getParticipantsForRound = (round: number, allPicks: DungeonPick[], votes: 
         // If a vote hasn't happened yet for the previous round, we can't determine the winner for *this* round yet.
         // This scenario is handled by getNextMatch checking votes round by round.
         // For participant calculation, assume the vote *should* exist if we're calculating for the *next* round.
-        return vote ? vote.winningSubmissionId : null; // Return null if vote missing (shouldn't happen in ideal flow)
+        return vote ? vote.winningSubmission : null; // Return null if vote missing (shouldn't happen in ideal flow)
     });
 
     // Combine winners and byes from the previous round
@@ -179,8 +179,8 @@ export const generateNextMatch = (allPicks: DungeonPick[], votes: Vote[]): NextM
                     return {
                         round: match.round,
                         match: match.match,
-                        submissionAId: match.submissionAId,
-                        submissionBId: match.submissionBId,
+                        submissionA: allPicks.filter((pick) => pick.id === match.submissionAId)[0],
+                        submissionB: allPicks.filter((pick) => pick.id === match.submissionBId)[0],
                     };
                 }
                 // If one is null, it's effectively a bye advancing, continue searching
