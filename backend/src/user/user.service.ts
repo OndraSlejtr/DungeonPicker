@@ -61,7 +61,7 @@ export const getUserInfo = async (accessToken: string): Promise<Result<DiscordUs
         const guildMembership = guilds.find((guild: { id: string }) => guild.id === guildId);
 
         if (!guildMembership) {
-            return { error: "User is not part of the guild.", errorCode: 401, data: null };
+            return { error: "User is not part of the guild.", errorCode: 401 };
         }
 
         const userData: DiscordUser = userResponse.data;
@@ -72,6 +72,6 @@ export const getUserInfo = async (accessToken: string): Promise<Result<DiscordUs
         return { data: userData };
     } catch (err) {
         logAxiosError(err, "Error fetching user data:");
-        return { error: "Failed to fetch user data", errorCode: 500, data: null };
+        return { error: "Failed to fetch user data", errorCode: 500 };
     }
 };
