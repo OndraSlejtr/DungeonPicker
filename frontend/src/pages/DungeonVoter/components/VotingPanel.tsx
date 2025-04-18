@@ -9,6 +9,7 @@ interface VotingPanelProps {
     onClick: () => void;
     disabled: boolean;
     isWinner?: boolean; // Optional: to style the winning panel
+    sameCount?: number;
 }
 
 const VotingPanel: React.FC<VotingPanelProps> = ({ dungeonList, onClick, disabled, isWinner }) => {

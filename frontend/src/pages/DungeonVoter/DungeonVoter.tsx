@@ -35,6 +35,8 @@ const DungeonVoter = (props: { listType: ListType; setCompletedStatus: (status: 
     const [dungeonsAId, setDungeonsAId] = useState<number>(0);
     const [dungeonsBId, setDungeonsBId] = useState<number>(0);
 
+    const [sameCount, setSameCount] = useState<number>(0);
+
     const [winningList, setWinningList] = useState<"A" | "B" | null>(null);
 
     const { listType, setCompletedStatus } = props;
@@ -57,8 +59,26 @@ const DungeonVoter = (props: { listType: ListType; setCompletedStatus: (status: 
                 setCurrentMatchIndex(match);
                 setCurrentRoundIndex(round);
 
-                setDungeonsA(getDungeonsByIds(submissionA.dungeons));
-                setDungeonsB(getDungeonsByIds(submissionB.dungeons));
+                // --- Start Reordering Logic ---
+                const idsA = submissionA.dungeons;
+                const idsB = submissionB.dungeons;
+
+                const commonIds = idsA.filter((id) => idsB.includes(id));
+
+                console.log(commonIds);
+                const nonCommonIdsA = idsA.filter((id) => !commonIds.includes(id));
+                const nonCommonIdsB = idsB.filter((id) => !commonIds.includes(id));
+
+                const commonIdsFromA = idsA.filter((id) => commonIds.includes(id));
+
+                setSameCount(commonIdsFromA.length);
+
+                const reorderedIdsA = [...nonCommonIdsA, ...commonIdsFromA];
+                const reorderedIdsB = [...nonCommonIdsB, ...commonIdsFromA];
+                // --- End Reordering Logic ---
+
+                setDungeonsA(getDungeonsByIds(reorderedIdsA));
+                setDungeonsB(getDungeonsByIds(reorderedIdsB));
                 setDungeonsAId(submissionA.id);
                 setDungeonsBId(submissionB.id);
             } else {
@@ -165,6 +185,7 @@ const DungeonVoter = (props: { listType: ListType; setCompletedStatus: (status: 
                             onClick={() => {}}
                             disabled={true}
                             isWinner={winningList === "A"}
+                            sameCount={sameCount}
                         />
                         <span className={styles.vsText}>
                             <Confirmed />
@@ -174,6 +195,7 @@ const DungeonVoter = (props: { listType: ListType; setCompletedStatus: (status: 
                             onClick={() => {}}
                             disabled={true}
                             isWinner={winningList === "B"}
+                            sameCount={sameCount}
                         />
                     </div>
                 )}
