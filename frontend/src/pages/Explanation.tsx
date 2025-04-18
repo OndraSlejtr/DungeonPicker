@@ -221,7 +221,7 @@ const Explanation = () => {
                 <WordCloud words={words} height="400px" width="100%" />
             </div> */}
 
-            <Button onClick={() => navigate("/pick")}>Pick your dungeons »</Button>
+            <Button onClick={() => navigate("/vote")}>Vote for dungeons »</Button>
             {/* <p style={{ fontSize: "1rem", marginBottom: "2rem" }}>
                 Once submissions close, everyone can vote on best Pick in tournament style bracket.
             </p> */}
