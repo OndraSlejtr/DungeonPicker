@@ -1,6 +1,7 @@
 import styles from "../DungeonPicker.module.css";
 import { Dungeon } from "../../../data/dungeons";
 import DungeonItem from "../../../components/dungeon/DungeonItem";
+import DungeonsList from "../../../components/dungeon/DungeonsList"; // Import the new component
 
 interface SelectedDungeonsPanelProps {
     selectedDungeons: Dungeon[];
@@ -29,6 +30,10 @@ const SelectedDungeonsPanel = ({
         return styles.submitButton;
     };
 
+    const renderDungeonItem = (dungeon: Dungeon) => (
+        <DungeonItem key={dungeon.id} dungeon={dungeon} onClick={() => onRemoveDungeon(dungeon.id)} />
+    );
+
     return (
         <div className={styles.selectionPanel}>
             {selectedDungeons.length === maxSelection ? (
@@ -40,15 +45,11 @@ const SelectedDungeonsPanel = ({
                     Your Selection ({selectedDungeons.length}/{maxSelection})
                 </h2>
             )}
-            {selectedDungeons.length === 0 ? (
-                <p className={styles.placeholder}>No dungeons selected</p>
-            ) : (
-                <ul className={styles.dungeonList}>
-                    {selectedDungeons.map((dungeon) => (
-                        <DungeonItem key={dungeon.id} dungeon={dungeon} onClick={() => onRemoveDungeon(dungeon.id)} />
-                    ))}
-                </ul>
-            )}
+            <DungeonsList
+                dungeons={selectedDungeons}
+                renderItem={renderDungeonItem}
+                placeholder={<p className={styles.placeholder}>No dungeons selected</p>}
+            />
         </div>
     );
 };
