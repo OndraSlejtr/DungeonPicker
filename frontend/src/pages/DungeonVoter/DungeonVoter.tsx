@@ -1,164 +1,139 @@
 import React, { useState, useEffect, useCallback } from "react";
-import {
-    TournamentBracket,
-    TournamentMatch,
-    TournamentRound,
-    DungeonList,
-    generateMockTournamentBracket,
-    getDungeonsByIds,
-} from "../../data/tournament";
+
 import VotingPanel from "./components/VotingPanel";
 import styles from "./DungeonVoter.module.css";
-import Spinner from "../../components/Spinner"; // Assuming Spinner exists
-import DungeonItem from "../../components/dungeon/DungeonItem";
-import DungeonsList from "../../components/dungeon/DungeonsList";
+import { Dungeon, getDungeonsByIds } from "../../data/dungeons";
 
 type VotingState = "idle" | "voted" | "loadingNext" | "finished";
 
 const DungeonVoter: React.FC = () => {
-    const [bracket, setBracket] = useState<TournamentBracket | null>(null);
+    // const [bracket, setBracket] = useState<TournamentBracket | null>(null);
     const [currentRoundIndex, setCurrentRoundIndex] = useState<number>(0);
     const [currentMatchIndex, setCurrentMatchIndex] = useState<number>(0);
+    const [maxMatchIndex, setMaxMatchIndex] = useState<number>(7);
     const [votingState, setVotingState] = useState<VotingState>("idle");
-    const [votedList, setVotedList] = useState<DungeonList | null>(null); // Track which list was clicked
+
+    const [dungeonsA, setDungeonsA] = useState<Dungeon[]>([]); // Track dungeons for list A
+    const [dungeonsB, setDungeonsB] = useState<Dungeon[]>([]); // Track dungeons for list B
+
+    const [winningList, setWinningList] = useState<"A" | "B" | null>(null); // Track the winning list
+
+    // const listADungeons = votingState === "idle" && currentMatch?.listA ? getDungeonsByIds(currentMatch.listA) : [];
+    // const listBDungeons = votingState === "idle" && currentMatch?.listB ? getDungeonsByIds(currentMatch.listB) : [];
 
     useEffect(() => {
         // Generate mock data on mount
         // TODO: Replace with fetching actual bracket data from backend
-        setBracket(generateMockTournamentBracket(16)); // e.g., start with 16 lists
         setCurrentRoundIndex(0);
         setCurrentMatchIndex(0);
         setVotingState("idle");
+        setDungeonsA(getDungeonsByIds([1, 2, 3, 4, 5, 6, 7, 8]));
+        setDungeonsB(getDungeonsByIds([29, 30, 31, 32, 33, 34, 35, 36]));
     }, []);
 
-    const currentRound: TournamentRound | undefined = bracket?.rounds[currentRoundIndex];
-    const currentMatch: TournamentMatch | undefined = currentRound?.matches[currentMatchIndex];
+    // const currentRound: TournamentRound | undefined = bracket?.rounds[currentRoundIndex];
+    // const currentMatch: TournamentMatch | undefined = currentRound?.matches[currentMatchIndex];
 
     const advanceToNext = useCallback(() => {
-        if (!bracket) return;
-
-        setVotingState("loadingNext"); // Show loading indicator
-
         setTimeout(() => {
-            let nextMatchIndex = currentMatchIndex + 1;
-            let nextRoundIndex = currentRoundIndex;
+            // let nextMatchIndex = currentMatchIndex + 1;
+            // let nextRoundIndex = currentRoundIndex;
 
-            if (nextMatchIndex >= bracket.rounds[currentRoundIndex].matches.length) {
-                // Move to the next round
-                nextRoundIndex++;
-                nextMatchIndex = 0;
+            // if (nextMatchIndex >= bracket.rounds[currentRoundIndex].matches.length) {
+            //     // Move to the next round
+            //     nextRoundIndex++;
+            //     nextMatchIndex = 0;
 
-                if (nextRoundIndex >= bracket.rounds.length) {
-                    // Tournament finished
-                    setVotingState("finished");
-                    return; // Stop advancement
-                }
+            //     if (nextRoundIndex >= bracket.rounds.length) {
+            //         // Tournament finished
+            //         setVotingState("finished");
+            //         return; // Stop advancement
+            //     }
+            // }
 
-                // TODO: In a real scenario, update the next round's matches
-                // based on winners from the current round before proceeding.
-                // For mock data, we just move indices.
-            }
-
-            setCurrentMatchIndex(nextMatchIndex);
-            setCurrentRoundIndex(nextRoundIndex);
-            setVotedList(null); // Reset voted list indicator
+            // setCurrentMatchIndex(nextMatchIndex);
+            // setCurrentRoundIndex(nextRoundIndex);
+            // setVotedList(null); // Reset voted list indicator
+            // setWinnerDungeonsToShow([]); // Clear winner display
             setVotingState("idle"); // Ready for the next vote
         }, 3000); // 3-second pause
-    }, [bracket, currentRoundIndex, currentMatchIndex]);
+    }, [currentRoundIndex, currentMatchIndex]);
 
-    const handleVote = (selectedList: DungeonList) => {
-        if (votingState !== "idle" || !currentMatch) return;
+    const handleVote = (selectedList: Dungeon[], side: "A" | "B") => {
+        // if (votingState !== "idle" || !currentMatch) return;
 
-        console.log(`Voted for list in Round ${currentRoundIndex}, Match ${currentMatchIndex}`);
-        // TODO: Send vote to backend
+        // console.log(`Voted for list in Round ${currentRoundIndex}, Match ${currentMatchIndex}`);
+        // // TODO: Send vote to backend
 
         // Update the match winner in the local state (for display/mock progression)
-        // This mutation is okay for local state management here
-        currentMatch.winner = selectedList;
-        setVotedList(selectedList); // Set which list was voted for styling
+        // currentMatch.winner = selectedList;
+        // setWinnerDungeonsToShow(getDungeonsByIds(selectedList)); // Prepare winner dungeons for display
         setVotingState("voted"); // Indicate vote happened
+        setWinningList(side); // Set the winning list
 
         // Advance to the next match/round after a delay
         advanceToNext();
     };
 
-    if (!bracket || !currentMatch) {
-        return <Spinner />; // Show loading spinner while bracket generates/loads
-    }
+    // if (!bracket || !currentMatch) {
+    //     return <Spinner />; // Show loading spinner while bracket generates/loads
+    // }
 
-    if (votingState === "finished") {
-        // Find the winner of the final match
-        const finalRound = bracket.rounds[bracket.rounds.length - 1];
-        const finalWinnerList = finalRound?.matches[0]?.winner; // Assuming final round has one match
-        const winnerDungeons = finalWinnerList ? getDungeonsByIds(finalWinnerList) : [];
+    // if (votingState === "finished") {
+    //     // Find the winner of the final match
+    //     const finalRound = bracket.rounds[bracket.rounds.length - 1];
+    //     const finalWinnerList = finalRound?.matches[0]?.winner; // Assuming final round has one match
+    //     const winnerDungeons = finalWinnerList ? getDungeonsByIds(finalWinnerList) : [];
 
-        return (
-            <div className={`${styles.container} ${styles.tournamentWinner}`}>
-                <h2>Tournament Complete!</h2>
-                <h3>Winner:</h3>
-                {winnerDungeons.length > 0 ? (
-                    <div className={styles.votingPanel}>
-                        <DungeonsList
-                            dungeons={winnerDungeons}
-                            renderItem={(d) => <DungeonItem key={d.id} dungeon={d} interactive={false} />}
-                        />
-                    </div>
-                ) : (
-                    <p>Winner could not be determined.</p>
-                )}
-            </div>
-        );
-    }
+    //     return (
+    //         <div className={`${styles.container} ${styles.tournamentWinner}`}>
+    //             <h2>Tournament Complete!</h2>
+    //             <h3>Winner:</h3>
+    //             {winnerDungeons.length > 0 ? (
+    //                 <div className={styles.votingPanel}>
+    //                     <DungeonsList
+    //                         dungeons={winnerDungeons}
+    //                         renderItem={(d) => <DungeonItem key={d.id} dungeon={d} interactive={false} />}
+    //                     />
+    //                 </div>
+    //             ) : (
+    //                 <p>Winner could not be determined.</p>
+    //             )}
+    //         </div>
+    //     );
+    // }
 
     // Get actual Dungeon objects for the current match
-    const listADungeons = currentMatch.listA ? getDungeonsByIds(currentMatch.listA) : [];
-    const listBDungeons = currentMatch.listB ? getDungeonsByIds(currentMatch.listB) : [];
-
-    const isLoading = votingState === "loadingNext" || votingState === "voted";
 
     return (
         <div className={styles.container}>
             <div className={styles.roundInfo}>
-                Round {currentRoundIndex + 1} - Match {currentMatchIndex + 1} / {currentRound?.matches.length ?? 0}
+                Round {currentRoundIndex + 1} - Match {currentMatchIndex + 1} / {maxMatchIndex + 1}
             </div>
 
-            {isLoading ? (
-                <div className={styles.loadingNext}>Loading next match...</div>
-            ) : (
+            {votingState === "voted" && (
+                <div className={`${styles.matchContainer} `}>
+                    <VotingPanel
+                        dungeonList={dungeonsA}
+                        onClick={() => {}}
+                        disabled={true}
+                        isWinner={winningList === "A"}
+                    />
+                    <span className={styles.vsText}>&nbsp;</span>
+                    <VotingPanel
+                        dungeonList={dungeonsB}
+                        onClick={() => {}}
+                        disabled={true}
+                        isWinner={winningList === "B"}
+                    />
+                </div>
+            )}
+
+            {votingState === "idle" && (
                 <div className={styles.matchContainer}>
-                    {
-                        listADungeons.length > 0 && currentMatch.listA ? (
-                            <VotingPanel
-                                dungeonList={listADungeons}
-                                onClick={() => handleVote(currentMatch.listA!)}
-                                disabled={votingState !== "idle"}
-                                isWinner={votingState === "voted" && votedList === currentMatch.listA}
-                                isLoser={votingState === "voted" && votedList !== currentMatch.listA}
-                            />
-                        ) : (
-                            <div className={styles.votingPanel}>
-                                <p>Waiting for opponent...</p>
-                            </div>
-                        ) /* Placeholder */
-                    }
-
+                    <VotingPanel dungeonList={dungeonsA} onClick={() => handleVote(dungeonsA, "A")} disabled={false} />
                     <span className={styles.vsText}>VS</span>
-
-                    {
-                        listBDungeons.length > 0 && currentMatch.listB ? (
-                            <VotingPanel
-                                dungeonList={listBDungeons}
-                                onClick={() => handleVote(currentMatch.listB!)}
-                                disabled={votingState !== "idle"}
-                                isWinner={votingState === "voted" && votedList === currentMatch.listB}
-                                isLoser={votingState === "voted" && votedList !== currentMatch.listB}
-                            />
-                        ) : (
-                            <div className={styles.votingPanel}>
-                                <p>Waiting for opponent...</p>
-                            </div>
-                        ) /* Placeholder */
-                    }
+                    <VotingPanel dungeonList={dungeonsB} onClick={() => handleVote(dungeonsB, "B")} disabled={false} />
                 </div>
             )}
         </div>

@@ -72,6 +72,3 @@ export const generateMockTournamentBracket = (numberOfLists: number = 16): Tourn
 };
 
 // Function to get Dungeon objects from IDs
-export const getDungeonsByIds = (ids: number[]): Dungeon[] => {
-    return ids.map((id) => allDungeons.find((d) => d.id === id)).filter((d) => d !== undefined) as Dungeon[];
-};

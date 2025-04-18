@@ -9,10 +9,9 @@ interface VotingPanelProps {
     onClick: () => void;
     disabled: boolean;
     isWinner?: boolean; // Optional: to style the winning panel
-    isLoser?: boolean; // Optional: to style the losing panel
 }
 
-const VotingPanel: React.FC<VotingPanelProps> = ({ dungeonList, onClick, disabled, isWinner, isLoser }) => {
+const VotingPanel: React.FC<VotingPanelProps> = ({ dungeonList, onClick, disabled, isWinner }) => {
     const renderDungeonItem = (dungeon: Dungeon) => (
         <DungeonItem
             key={dungeon.id}
@@ -23,9 +22,9 @@ const VotingPanel: React.FC<VotingPanelProps> = ({ dungeonList, onClick, disable
 
     const panelClasses = [
         styles.votingPanel,
-        disabled ? styles.disabled : "",
-        isWinner ? styles.winner : "",
-        isLoser ? styles.loser : "",
+        disabled && styles.disabled,
+        isWinner && styles.winner,
+        isWinner === false && styles.loser,
     ].join(" ");
 
     return (
