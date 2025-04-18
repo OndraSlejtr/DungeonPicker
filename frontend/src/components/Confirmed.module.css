@@ -1,0 +1,53 @@
+.circle {
+    width: 56px; /* Size of the circle */
+    height: 56px;
+    border-radius: 50%;
+    background-color: var(--jade-green); /* Green background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px auto; /* Center horizontally for demonstration */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.checkmark {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: block;
+    stroke-width: 3; /* Stroke width for the checkmark */
+    stroke: white; /* Checkmark color */
+    stroke-miterlimit: 10;
+    box-shadow: inset 0px 0px 0px var(--jade-green);
+    animation: fill 0.4s ease-in-out 0.4s forwards, scale 0.3s ease-in-out 0.9s both;
+}
+
+.checkmarkCheck {
+    transform-origin: 50% 50%;
+    stroke-dasharray: 48; /* Approximate length of the checkmark path */
+    stroke-dashoffset: 48;
+    /* Checkmark fill is none (transparent) by default from SVG path attribute */
+    animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+}
+
+@keyframes stroke {
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes scale {
+    0%,
+    100% {
+        transform: none;
+    }
+    50% {
+        transform: scale3d(1.1, 1.1, 1);
+    }
+}
+
+@keyframes fill {
+    100% {
+        box-shadow: inset 0px 0px 0px 30px var(--jade-green);
+    }
+}

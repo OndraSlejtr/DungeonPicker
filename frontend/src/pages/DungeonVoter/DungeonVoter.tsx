@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import VotingPanel from "./components/VotingPanel";
 import styles from "./DungeonVoter.module.css";
 import { Dungeon, getDungeonsByIds } from "../../data/dungeons";
+import Confirmed from "../../components/Confirmed";
 
 type VotingState = "idle" | "voted" | "loadingNext" | "finished";
 
@@ -119,7 +120,9 @@ const DungeonVoter: React.FC = () => {
                         disabled={true}
                         isWinner={winningList === "A"}
                     />
-                    <span className={styles.vsText}>&nbsp;</span>
+                    <span className={styles.vsText}>
+                        <Confirmed />
+                    </span>
                     <VotingPanel
                         dungeonList={dungeonsB}
                         onClick={() => {}}
