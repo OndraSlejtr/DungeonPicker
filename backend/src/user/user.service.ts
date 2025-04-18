@@ -1,6 +1,6 @@
 import axios from "axios";
-import { logAxiosError } from "../logging/AxiosErrorLogger";
-import { guildId } from "../constants";
+import { logAxiosError } from "../logging/AxiosErrorLogger.js";
+import { guildId } from "../constants.js";
 
 export type DiscordUser = {
     id: string; // User ID

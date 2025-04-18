@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { getUserInfo } from "../user/user.service";
-import { logAxiosError } from "../logging/AxiosErrorLogger";
-import { generateNextMatch } from "./tournament.service";
-import { bestDungeonsPicksBracket, worstDungeonsPicksBracket } from "../data/brackets";
-import { supabase } from "../database/supabaseClient";
+import { getUserInfo } from "../user/user.service.js";
+import { logAxiosError } from "../logging/AxiosErrorLogger.js";
+import { generateNextMatch } from "./tournament.service.js";
+import { bestDungeonsPicksBracket, worstDungeonsPicksBracket } from "../data/brackets.js";
+import { supabase } from "../database/supabaseClient.js";
 
 const filterSelf = (bracket: any[], discordUsername: string) => {
     return bracket.filter((pick) => pick.authors_discord_id !== discordUsername);
