@@ -6,6 +6,7 @@
     width: 100%;
     max-width: 1200px; /* Adjust as needed */
     margin: 0 auto;
+    overflow-x: hidden; /* Prevent horizontal scrollbars during slide */
 }
 
 .matchContainer {
@@ -16,6 +17,43 @@
     margin-top: 20px;
 }
 
+/* Wrapper for animated content */
+.animatedContent {
+    width: 100%;
+    /* Add other necessary layout styles if needed */
+}
+
+/* Keyframes for animations */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px); /* Start slightly to the left */
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Animation classes applied based on votingState */
+.contentFadeOut {
+    animation: fadeOut 2.5s ease-in forwards;
+}
+
+.contentSlideIn {
+    /* Apply slide-in when the component mounts or updates to idle */
+    animation: slideInLeft 0.5s ease-out forwards;
+}
+
 .votingPanel {
     flex: 1; /* Each panel takes equal space */
     border: 3px solid #666;
@@ -23,7 +61,7 @@
     padding: 15px;
     background-color: var(--muted-dark-gray);
     cursor: pointer;
-    transition: transform 0.2s ease-in-out, border-color 0.3s, background-color 0.3s;
+    transition: transform 0.2s ease-in-out, border-color 0.3s, background-color 0.3s, opacity 0.3s; /* Added opacity transition */
     position: relative; /* For absolute positioning of click indicator */
     min-width: 300px; /* Ensure minimum width */
     max-width: 450px; /* Limit maximum width */
@@ -61,6 +99,10 @@
     align-self: center;
     margin: 0 20px; /* Space around VS */
     width: 50px;
+    display: flex; /* Use flexbox for centering Confirmed component */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    text-align: center; /* Ensure text VS is centered */
 }
 
 .roundInfo {
