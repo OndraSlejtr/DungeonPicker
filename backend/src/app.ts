@@ -9,6 +9,7 @@ import path from "path";
 import { Request, Response } from "express";
 import { logAxiosError } from "./logging/AxiosErrorLogger.js";
 import { supabase } from "./supabaseClient.js";
+import router from "./tournament/tournament.routes.js";
 
 const app = express();
 app.use(cookieParser());
@@ -317,6 +318,8 @@ app.get("/api/dungeons/:type", async (req: Request, res: Response) => {
         res.status(500).json({ error: "An unexpected error occurred" });
     }
 });
+
+app.use("/", router);
 
 // Derive __dirname in ES module
 const __filename = fileURLToPath(import.meta.url);

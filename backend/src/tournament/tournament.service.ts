@@ -1,4 +1,4 @@
-import { bestDungeonsPicksBracket as initialPicks } from "./brackets.js"; // Assuming brackets.ts exports this
+import { bestDungeonsPicksBracket as initialPicks } from "../data/brackets.js"; // Assuming brackets.ts exports this
 
 export interface DungeonPick {
     dungeons: number[];

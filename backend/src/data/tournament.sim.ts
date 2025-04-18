@@ -1,5 +1,5 @@
 import { bestDungeonsPicksBracket } from "./brackets";
-import { findPickById, getNextMatch, recordVote } from "./tournamentUtils";
+import { findPickById, getNextMatch, recordVote } from "../tournament/tournament.service";
 
 const previousVotes = [
     {
