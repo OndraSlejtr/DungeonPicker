@@ -5,19 +5,24 @@ import { generateNextMatch } from "./tournament.service";
 import { bestDungeonsPicksBracket, worstDungeonsPicksBracket } from "../data/brackets";
 import { supabase } from "../database/supabaseClient";
 
-const _getNextMatch = async (listType: string, discordUsername: String) => {
+const filterSelf = (bracket: any[], discordUsername: string) => {
+    return bracket.filter((pick) => pick.authors_discord_id !== discordUsername);
+};
+
+const _getNextMatch = async (listType: string, discordUsername: string) => {
     const currentVotes = await supabase
         .from("DungeonVotes")
         .select("*")
         .eq("voter_discord_id", discordUsername)
         .eq("listType", listType);
 
-    console.log("Current votes:", currentVotes.data);
-
     const nextMatch = generateNextMatch(
-        listType === "best" ? bestDungeonsPicksBracket : worstDungeonsPicksBracket,
+        listType === "best"
+            ? filterSelf(bestDungeonsPicksBracket, discordUsername)
+            : filterSelf(worstDungeonsPicksBracket, discordUsername),
         currentVotes.data || []
     );
+
     return nextMatch;
 };
 
@@ -61,8 +66,6 @@ const postVote = async (req: Request, res: Response) => {
         res.status(401).json({ error: "Unauthorized" });
         return;
     }
-
-    console.log("xd", req.body);
 
     const { listType } = req.params;
     const { round, match, winnerId, loserId, winner } = req.body;

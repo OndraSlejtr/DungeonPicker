@@ -13,7 +13,7 @@
     display: flex;
     justify-content: space-around; /* Space out the two panels */
     width: 100%;
-    gap: 20px; /* Gap between panels */
+    gap: 5px; /* Gap between panels */
     margin-top: 20px;
 }
 
@@ -97,22 +97,22 @@
     font-weight: bold;
     color: var(--gold);
     align-self: center;
-    margin: 0 20px; /* Space around VS */
-    width: 50px;
+    margin: 0; /* Space around VS */
+    width: 120px;
     display: flex; /* Use flexbox for centering Confirmed component */
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
     text-align: center; /* Ensure text VS is centered */
+
+    flex-direction: column;
+
+    justify-content: space-between; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: auto;
 }
 
 .roundInfo {
-    font-size: 1.5rem;
     color: var(--text-light-gold);
     text-align: center;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+    font-size: 1rem;
 }
 
 .roundInfo h1 {

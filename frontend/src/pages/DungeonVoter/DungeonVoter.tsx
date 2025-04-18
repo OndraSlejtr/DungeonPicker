@@ -44,18 +44,13 @@ const DungeonVoter = (props: { listType: ListType; setCompletedStatus: (status: 
     const handleNextRoundInfo = useCallback(
         (response: AxiosResponse) => {
             if (response.status === 200 || response.status === 201) {
-                console.log(response.data);
-
                 const { match: matchData, message } = response.data;
 
                 if (message === "No more matches available") {
                     setVotingState("finished");
                     setCompletedStatus(true);
-                    console.log("finished voting");
                     return;
                 }
-
-                console.log("New match up ahead");
 
                 const { match, round, submissionA, submissionB }: NextMatchInfo = matchData;
 
@@ -80,7 +75,10 @@ const DungeonVoter = (props: { listType: ListType; setCompletedStatus: (status: 
 
         setTimeout(() => {
             setWinningList(null);
-            setVotingState("idle");
+            setVotingState((votingState) => {
+                if (votingState !== "finished") return "idle";
+                else return "finished";
+            });
         }, 450);
     };
 
@@ -149,16 +147,12 @@ const DungeonVoter = (props: { listType: ListType; setCompletedStatus: (status: 
 
     return (
         <div className={styles.container}>
-            <div className={styles.roundInfo}>
-                <h1>{listType === "best" ? "😲 Pick BEST dungeons" : "💀 Pick WORST dungeons "}</h1>
+            {/* <div className={styles.roundInfo}>
+                <h1>{listType === "best" ? "😲 Pick BEST dungeons" : "💀 Pick WORST dungeons "}</h1> 
                 {votingState !== "finished" && (
-                    <p>
-                        {roundNames[currentRoundIndex]} - match {currentMatchIndex + 1}
-                    </p>
+                    <></>
                 )}
-            </div>
-
-            {votingState}
+            </div> */}
 
             <div
                 key={`${currentRoundIndex}-${currentMatchIndex}`}
@@ -191,7 +185,14 @@ const DungeonVoter = (props: { listType: ListType; setCompletedStatus: (status: 
                             onClick={() => handleVote(dungeonsA, "A")}
                             disabled={votingState !== "idle"}
                         />
-                        <span className={styles.vsText}>VS</span>
+                        <div className={styles.vsText}>
+                            <p className={styles.roundInfo}>
+                                {roundNames[currentRoundIndex]}
+                                <br />
+                                Match {currentMatchIndex + 1}
+                            </p>
+                            <div>VS</div>
+                        </div>
                         <VotingPanel
                             dungeonList={dungeonsB}
                             onClick={() => handleVote(dungeonsB, "B")}
@@ -202,7 +203,7 @@ const DungeonVoter = (props: { listType: ListType; setCompletedStatus: (status: 
 
                 {votingState === "finished" && (
                     <div className={styles.finishedContainer}>
-                        <h1 className={styles.finishedText}>This part of the tournament has finished!</h1>
+                        <h1 className={styles.finishedText}>You finished this part of tournament!</h1>
                         <p className={styles.finishedText}>
                             Make sure you vote on other half above! The results will be announced soon.
                         </p>

@@ -335,8 +335,17 @@ const picks = [
     },
 ];
 
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
 const startingBracket = picks
     .filter((pick) => pick.listType === "best")
-    .map((pick) => ({ dungeons: pick.dungeons, id: pick.id }));
+    .map((pick) => ({ dungeons: pick.dungeons, id: pick.id, authord_discord_id: pick.author_discord_id }));
 
-console.log(startingBracket);
+shuffleArray(startingBracket);
+
+console.log(startingBracket.length);

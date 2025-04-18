@@ -20,7 +20,7 @@ const MyVotes = () => {
                     className={`${styles.switchButton} ${styles.best} ${currentPicker === "best" ? styles.active : ""}`}
                     onClick={() => setCurrentPicker("best")}
                 >
-                    Best dungeons
+                    Vote for best dungeons
                     <DoneChip complete={bestCompletedStatus} />
                 </button>
                 <button
@@ -29,16 +29,16 @@ const MyVotes = () => {
                     }`}
                     onClick={() => setCurrentPicker("worst")}
                 >
-                    Worst dungeons
+                    Vote for worst dungeons
                     <DoneChip complete={worstCompletedStatus} />
                 </button>
             </div>
 
             {/* Conditionally render the DungeonPicker based on the selected type */}
             {currentPicker === "best" ? (
-                <DungeonVoter listType="best" setCompletedStatus={setBestCompletedStatus} />
+                <DungeonVoter key="best" listType="best" setCompletedStatus={setBestCompletedStatus} />
             ) : (
-                <DungeonVoter listType="worst" setCompletedStatus={setWorstCompletedStatus} />
+                <DungeonVoter key="worst" listType="worst" setCompletedStatus={setWorstCompletedStatus} />
             )}
         </div>
     );
