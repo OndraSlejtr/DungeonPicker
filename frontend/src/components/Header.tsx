@@ -21,7 +21,7 @@ const Header = () => {
     };
 
     useEffect(() => {
-        const targetDate = new Date("2025-04-18T00:00:00"); // Midnight of April 18, 2025
+        const targetDate = new Date("2025-04-18T16:00:00"); // Midnight of April 18, 2025
 
         const updateCountdown = () => {
             const now = new Date();
