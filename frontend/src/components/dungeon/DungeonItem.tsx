@@ -8,17 +8,25 @@ interface DungeonItemProps {
     disabled?: boolean;
     interactive?: boolean;
     onClick?: () => void;
+    identical?: boolean; // Optional prop to indicate if the item is identical to another
 }
 
-const DungeonItem: React.FC<DungeonItemProps> = ({ dungeon, selected, disabled, interactive = true, onClick }) => {
+const DungeonItem: React.FC<DungeonItemProps> = ({
+    dungeon,
+    selected,
+    disabled,
+    interactive = true,
+    onClick,
+    identical,
+}) => {
     const getImageUrl = (name: string, expansion: string) =>
         new URL(`../../assets/dungeons/${expansion}/${name}.png`, import.meta.url).href;
 
     return (
         <li
-            className={`${styles.dungeonItem} ${selected ? styles.selected : ""} ${disabled ? styles.disabled : ""} ${
-                !interactive ? styles.nonInteractive : ""
-            }`}
+            className={`${styles.dungeonItem} ${identical && styles.identical} ${selected ? styles.selected : ""} ${
+                disabled ? styles.disabled : ""
+            } ${!interactive ? styles.nonInteractive : ""}`}
             onClick={() => interactive && !selected && !disabled && onClick?.()}
         >
             <div

@@ -206,6 +206,7 @@ const DungeonVoter = (props: { listType: ListType; setCompletedStatus: (status: 
                             dungeonList={dungeonsA}
                             onClick={() => handleVote(dungeonsA, "A")}
                             disabled={votingState !== "idle"}
+                            sameCount={sameCount}
                         />
                         <div className={styles.vsText}>
                             <p className={styles.roundInfo}>
@@ -219,6 +220,7 @@ const DungeonVoter = (props: { listType: ListType; setCompletedStatus: (status: 
                             dungeonList={dungeonsB}
                             onClick={() => handleVote(dungeonsB, "B")}
                             disabled={votingState !== "idle"}
+                            sameCount={sameCount}
                         />
                     </div>
                 )}

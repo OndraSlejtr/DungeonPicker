@@ -65,3 +65,7 @@
 .nonInteractive {
     cursor: default; /* Change cursor to default */
 }
+
+.identical {
+    opacity: 0.3;
+}

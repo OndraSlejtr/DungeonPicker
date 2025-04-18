@@ -12,12 +12,13 @@ interface VotingPanelProps {
     sameCount?: number;
 }
 
-const VotingPanel: React.FC<VotingPanelProps> = ({ dungeonList, onClick, disabled, isWinner }) => {
-    const renderDungeonItem = (dungeon: Dungeon) => (
+const VotingPanel: React.FC<VotingPanelProps> = ({ dungeonList, onClick, disabled, isWinner, sameCount }) => {
+    const renderDungeonItem = (dungeon: Dungeon, identical?: boolean) => (
         <DungeonItem
             key={dungeon.id}
             dungeon={dungeon}
             interactive={false} // Items themselves are not clickable here
+            identical={identical}
         />
     );
 
@@ -30,7 +31,7 @@ const VotingPanel: React.FC<VotingPanelProps> = ({ dungeonList, onClick, disable
 
     return (
         <div className={panelClasses} onClick={!disabled ? onClick : undefined}>
-            <DungeonsList dungeons={dungeonList} renderItem={renderDungeonItem} />
+            <DungeonsList dungeons={dungeonList} renderItem={renderDungeonItem} sameCount={sameCount} />
         </div>
     );
 };
