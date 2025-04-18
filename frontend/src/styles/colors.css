@@ -26,4 +26,6 @@
     --soft-gold: #d4af37; /* Golden offshoot */
     --soft-purple: #7a3eac; /* Purple offshoot */
     --light-purple: #bc87e7; /* Purple offshoot */
+
+    --transparent-soft-gold: rgba(212, 175, 55, 0.2); /* Transparent soft gold */
 }

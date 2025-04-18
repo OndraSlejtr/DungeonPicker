@@ -18,7 +18,7 @@
 }
 
 /* Apply hover effect only if not nonInteractive */
-.dungeonItem:not(.nonInteractive):hover {
+.dungeonItem:not(.nonInteractive, .selected):hover {
     transform: scale(1.05);
 }
 
