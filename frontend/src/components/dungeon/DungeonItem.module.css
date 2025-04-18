@@ -1,0 +1,61 @@
+.dungeonItem {
+    list-style: none;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.2s ease-in-out;
+    position: relative; /* Needed for absolute positioning of the name */
+}
+
+.dungeonItem.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.dungeonItem {
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.dungeonItem:hover {
+    transform: scale(1.05);
+}
+
+.dungeon {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    background-size: 120%;
+    height: 75px;
+    padding: 0 10px;
+    background-position: center;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+}
+
+.dungeonName {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 5px 10px;
+    border-radius: 5px 5px 0 0;
+}
+
+.selected {
+    cursor: not-allowed;
+    opacity: 0.5;
+    transform: none;
+    -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+    filter: grayscale(100%);
+}
+
+.selected:hover {
+    transform: scale(1);
+}
+
+.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    transform: none;
+}

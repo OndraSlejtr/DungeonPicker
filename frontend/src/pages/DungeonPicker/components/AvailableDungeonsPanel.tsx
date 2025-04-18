@@ -1,6 +1,6 @@
 import styles from "../DungeonPicker.module.css";
 import { Dungeon } from "../../../data/dungeons";
-import DungeonItem from "./DungeonItem";
+import DungeonItem from "../../../components/dungeon/DungeonItem";
 
 interface AvailableDungeonsPanelProps {
     availableDungeons: Dungeon[];

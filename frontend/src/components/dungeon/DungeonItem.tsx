@@ -1,6 +1,6 @@
 import React from "react";
-import styles from "../DungeonPicker.module.css";
-import { Dungeon } from "../../../data/dungeons";
+import styles from "./DungeonItem.module.css"; // Updated import path
+import { Dungeon } from "../../data/dungeons";
 
 interface DungeonItemProps {
     dungeon: Dungeon;
@@ -11,7 +11,7 @@ interface DungeonItemProps {
 
 const DungeonItem: React.FC<DungeonItemProps> = ({ dungeon, selected, disabled, onClick }) => {
     const getImageUrl = (name: string, expansion: string) =>
-        new URL(`../../../assets/dungeons/${expansion}/${name}.png`, import.meta.url).href;
+        new URL(`../../assets/dungeons/${expansion}/${name}.png`, import.meta.url).href;
 
     return (
         <li
