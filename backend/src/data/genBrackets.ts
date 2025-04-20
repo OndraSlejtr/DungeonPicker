@@ -342,10 +342,12 @@ function shuffleArray(array: any[]) {
     }
 }
 
-const startingBracket = picks
-    .filter((pick) => pick.listType === "best")
-    .map((pick) => ({ dungeons: pick.dungeons, id: pick.id, authord_discord_id: pick.author_discord_id }));
+// const startingBracket = picks
+//     .filter((pick) => pick.listType === "best")
+//     .map((pick) => ({ dungeons: pick.dungeons, id: pick.id, authord_discord_id: pick.author_discord_id }));
+
+const startingBracket = picks.filter((pick) => pick.listType === "worst").map((pick) => pick.id);
 
 shuffleArray(startingBracket);
 
-console.log(startingBracket.length);
+console.log(startingBracket);

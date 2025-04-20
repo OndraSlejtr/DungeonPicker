@@ -58,6 +58,9 @@ const Header = () => {
                 <NavLink to={"/vote"} className={styles.link}>
                     {countdown}
                 </NavLink>
+                <NavLink to={"/results"} className={styles.link}>
+                    Results
+                </NavLink>
             </nav>
             <div className={styles.userSection}>
                 {isAuthenticated && (
