@@ -9,6 +9,7 @@ interface DungeonItemProps {
     interactive?: boolean;
     onClick?: () => void;
     identical?: boolean; // Optional prop to indicate if the item is identical to another
+    score?: number; // Optional score to display
 }
 
 const DungeonItem: React.FC<DungeonItemProps> = ({
@@ -18,6 +19,7 @@ const DungeonItem: React.FC<DungeonItemProps> = ({
     interactive = true,
     onClick,
     identical,
+    score, // Destructure score
 }) => {
     const getImageUrl = (name: string, expansion: string) =>
         new URL(`../../assets/dungeons/${expansion}/${name}.png`, import.meta.url).href;
@@ -34,6 +36,8 @@ const DungeonItem: React.FC<DungeonItemProps> = ({
                 style={{ backgroundImage: `url(${getImageUrl(dungeon.journalId + "", dungeon.expansion.shorthand)})` }}
             >
                 <span className={styles.dungeonName}>{dungeon.name}</span>
+                {/* Conditionally render the score */}
+                {score !== undefined && <span className={styles.dungeonScore}>{score.toFixed(1)} pts</span>}
             </div>
         </li>
     );

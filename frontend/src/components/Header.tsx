@@ -2,11 +2,11 @@ import { NavLink } from "react-router-dom";
 import { useDiscordLogin } from "../auth/DiscordLoginContext";
 import styles from "./Header.module.css";
 import { backendUrl } from "../utils/environment";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
 const Header = () => {
     const { userData, isAuthenticated } = useDiscordLogin();
-    const [countdown, setCountdown] = useState("");
+    // const [countdown, setCountdown] = useState("");
 
     const handleLogout = async () => {
         try {
@@ -20,31 +20,31 @@ const Header = () => {
         }
     };
 
-    useEffect(() => {
-        const targetDate = new Date("2025-04-18T16:00:00");
+    // useEffect(() => {
+    //     const targetDate = new Date("2025-04-18T16:00:00");
 
-        const updateCountdown = () => {
-            const now = new Date();
-            const difference = targetDate.getTime() - now.getTime();
+    //     const updateCountdown = () => {
+    //         const now = new Date();
+    //         const difference = targetDate.getTime() - now.getTime();
 
-            if (difference <= 0) {
-                setCountdown("Voting has started!");
-                return;
-            }
+    //         if (difference <= 0) {
+    //             setCountdown("Voting has started!");
+    //             return;
+    //         }
 
-            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((difference / (1000 * 60)) % 60);
-            const seconds = Math.floor((difference / 1000) % 60);
+    //         const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    //         const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+    //         const minutes = Math.floor((difference / (1000 * 60)) % 60);
+    //         const seconds = Math.floor((difference / 1000) % 60);
 
-            setCountdown(`Voting starts in ${days}d ${hours}h ${minutes}m ${seconds}s`);
-        };
+    //         setCountdown(`Voting starts in ${days}d ${hours}h ${minutes}m ${seconds}s`);
+    //     };
 
-        updateCountdown(); // Initialize countdown immediately
-        const interval = setInterval(updateCountdown, 1000); // Update every second
+    //     updateCountdown(); // Initialize countdown immediately
+    //     const interval = setInterval(updateCountdown, 1000); // Update every second
 
-        return () => clearInterval(interval); // Cleanup interval on component unmount
-    }, []);
+    //     return () => clearInterval(interval); // Cleanup interval on component unmount
+    // }, []);
 
     return (
         <header className={styles.header}>
@@ -56,10 +56,13 @@ const Header = () => {
                     Pick
                 </NavLink>
                 <NavLink to={"/vote"} className={styles.link}>
-                    {countdown}
+                    Voting
                 </NavLink>
                 <NavLink to={"/results"} className={styles.link}>
-                    Results
+                    List Results
+                </NavLink>
+                <NavLink to={"/dungeon-results"} className={styles.link}>
+                    Dungeon Results
                 </NavLink>
             </nav>
             <div className={styles.userSection}>

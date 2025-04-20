@@ -1,0 +1,23 @@
+.resultsContainer {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #282c34; /* Example background */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    flex: 1;
+}
+
+.resultsTitle {
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.best {
+    color: var(--soft-gold);
+}
+
+.worst {
+    color: var(--soft-purple);
+}

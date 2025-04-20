@@ -8,6 +8,7 @@ import Explanation from "./pages/Explanation";
 import MyDungeons from "./pages/MyDungeons";
 import MyVotes from "./pages/MyVotes";
 import MyResults from "./pages/MyResults";
+import MyDungeonBasedResults from "./pages/MyDungeonBasedResults";
 
 const App = () => {
     return (
@@ -44,6 +45,14 @@ const App = () => {
                         element={
                             <AuthGuard>
                                 <MyResults />
+                            </AuthGuard>
+                        }
+                    />
+                    <Route
+                        path="/dungeon-results"
+                        element={
+                            <AuthGuard>
+                                <MyDungeonBasedResults />
                             </AuthGuard>
                         }
                     />
