@@ -16,11 +16,9 @@ interface DungeonPickResult {
     placement: number;
 }
 
-const Results = () => {
+const Results = ({ listType }: { listType: "best" | "worst" }) => {
     const [results, setResults] = useState<DungeonPickResult[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    // TODO: Add state/logic to switch between 'best' and 'worst' if needed
-    const listType = "best"; // Or 'worst'
 
     useEffect(() => {
         const loadResults = () => {
@@ -76,6 +74,13 @@ const Results = () => {
         return "";
     };
 
+    const getReward = (placement: number) => {
+        if (placement === 1) return "200k";
+        if (placement === 2) return "100k";
+        if (placement === 3) return "50k";
+        return "";
+    };
+
     return (
         <div className={styles.resultsContainer}>
             <h1>{listType === "best" ? "Best Dungeon List Results" : "Worst Dungeon List Results"}</h1>
@@ -84,9 +89,14 @@ const Results = () => {
                 {topThree.map((result) => (
                     <div key={result.id} className={`${styles.resultItem} ${getPlacementClass(result.placement)}`}>
                         <h2>
-                            {result.placement}
-                            {getPlacementSuffix(result.placement)} Place ({result.points} points) -{" "}
-                            {result.authors_discord_id}
+                            <div className={styles.resultPlacement}>
+                                {result.placement}
+                                {getPlacementSuffix(result.placement)} place
+                            </div>
+                            <div className={styles.resultTopHeader}>
+                                <strong>{result.authors_discord_id}</strong>
+                            </div>
+                            {getReward(result.placement)} reward ({result.points} pts)
                         </h2>
                         <DungeonsList dungeons={result.dungeons} renderItem={renderDungeonItem} />
                     </div>

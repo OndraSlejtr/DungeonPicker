@@ -10,13 +10,13 @@
 }
 
 .resultsContainer h1 {
-    margin-bottom: 30px;
+    margin-bottom: 50px;
     text-align: center;
 }
 
 .topThreeContainer {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 30px;
     width: 100%;
     margin-bottom: 40px;
@@ -27,12 +27,24 @@
     padding: 20px;
     border-radius: 8px;
     border: 2px solid #444;
+    flex: 1;
+    max-width: 450px;
 }
 
 .resultItem h2 {
     margin-bottom: 15px;
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
+
+    color: #fff;
+}
+
+.resultItem h2 .resultPlacement {
+    font-size: 0.8rem;
+}
+
+.resultItem h2 .resultTopHeader {
+    font-size: 2.5rem;
 }
 
 .firstPlace {

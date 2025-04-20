@@ -7,7 +7,7 @@ import Content from "./components/Content";
 import Explanation from "./pages/Explanation";
 import MyDungeons from "./pages/MyDungeons";
 import MyVotes from "./pages/MyVotes";
-import Results from "./pages/Results/Results"; // Import the new Results component
+import MyResults from "./pages/MyResults";
 
 const App = () => {
     return (
@@ -43,7 +43,7 @@ const App = () => {
                         path="/results"
                         element={
                             <AuthGuard>
-                                <Results />
+                                <MyResults />
                             </AuthGuard>
                         }
                     />
