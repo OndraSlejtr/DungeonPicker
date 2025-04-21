@@ -1,9 +1,14 @@
 import { useState } from "react";
 import styles from "./MyDungeon.module.css";
 import Results from "./Results/Results";
+import { timings } from "../utils/timing";
 
 const MyResults = () => {
     const [currentPicker, setCurrentPicker] = useState<"best" | "worst">("best");
+
+    if (!timings.results.isFulfilled()) {
+        return <h1>Results are not available yet.</h1>;
+    }
 
     return (
         <div className={styles.container}>

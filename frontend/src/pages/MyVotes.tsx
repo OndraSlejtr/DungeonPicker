@@ -2,6 +2,8 @@ import { useState } from "react";
 import styles from "./MyDungeon.module.css";
 import DoneChip from "../components/DoneChip";
 import DungeonVoter from "./DungeonVoter/DungeonVoter";
+import { timings } from "../utils/timing";
+import VotingClosed from "./DungeonVoter/VotingClosed";
 
 const MyVotes = () => {
     const [currentPicker, setCurrentPicker] = useState<"best" | "worst">("best");
@@ -12,6 +14,10 @@ const MyVotes = () => {
     //     if (bestCompletedStatus && worstCompletedStatus) return;
     //     setCurrentPicker((prev) => (prev === "best" ? "worst" : "best")); // Toggle between best and worst
     // };
+
+    if (!timings.votingClosed.isFulfilled()) {
+        return <VotingClosed />;
+    }
 
     return (
         <div className={styles.container}>

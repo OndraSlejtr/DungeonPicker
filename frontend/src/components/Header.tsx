@@ -2,11 +2,12 @@ import { NavLink } from "react-router-dom";
 import { useDiscordLogin } from "../auth/DiscordLoginContext";
 import styles from "./Header.module.css";
 import { backendUrl } from "../utils/environment";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { timings } from "../utils/timing";
 
 const Header = () => {
     const { userData, isAuthenticated } = useDiscordLogin();
-    // const [countdown, setCountdown] = useState("");
+    const [resultsCountdown, setResultsCountdown] = useState("");
 
     const handleLogout = async () => {
         try {
@@ -20,31 +21,10 @@ const Header = () => {
         }
     };
 
-    // useEffect(() => {
-    //     const targetDate = new Date("2025-04-18T16:00:00");
-
-    //     const updateCountdown = () => {
-    //         const now = new Date();
-    //         const difference = targetDate.getTime() - now.getTime();
-
-    //         if (difference <= 0) {
-    //             setCountdown("Voting has started!");
-    //             return;
-    //         }
-
-    //         const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-    //         const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
-    //         const minutes = Math.floor((difference / (1000 * 60)) % 60);
-    //         const seconds = Math.floor((difference / 1000) % 60);
-
-    //         setCountdown(`Voting starts in ${days}d ${hours}h ${minutes}m ${seconds}s`);
-    //     };
-
-    //     updateCountdown(); // Initialize countdown immediately
-    //     const interval = setInterval(updateCountdown, 1000); // Update every second
-
-    //     return () => clearInterval(interval); // Cleanup interval on component unmount
-    // }, []);
+    useEffect(() => {
+        const resultsCountdownUpdater = timings.results.getCountdownUpdateFn()(setResultsCountdown);
+        return resultsCountdownUpdater;
+    }, []);
 
     return (
         <header className={styles.header}>
@@ -58,12 +38,19 @@ const Header = () => {
                 <NavLink to={"/vote"} className={styles.link}>
                     Voting
                 </NavLink>
-                <NavLink to={"/results"} className={styles.link}>
-                    List Results
-                </NavLink>
-                <NavLink to={"/dungeon-results"} className={styles.link}>
-                    Dungeon Results
-                </NavLink>
+
+                {timings.results.isFulfilled() ? (
+                    <>
+                        <NavLink to={"/results"} className={styles.link}>
+                            List Results
+                        </NavLink>
+                        <NavLink to={"/dungeon-results"} className={styles.link}>
+                            Dungeon Results
+                        </NavLink>
+                    </>
+                ) : (
+                    <div style={{ fontSize: "0.9rem" }}>Results open in {resultsCountdown}</div>
+                )}
             </nav>
             <div className={styles.userSection}>
                 {isAuthenticated && (
